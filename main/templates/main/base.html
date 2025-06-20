@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Portfolio</title>
+    <!-- Tailwind CSS v4.1 via CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                200: "#bfdbfe",
+                300: "#93c5fd",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                800: "#1e40af",
+                900: "#1e3a8a",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .sidebar {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 260px;
+      }
+      .content {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-left: 260px;
+      }
+      .nav-text {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sidebar-collapsed {
+        width: 80px;
+      }
+      .sidebar-collapsed ~ .content {
+        margin-left: 80px;
+      }
+      .sidebar-collapsed .nav-text {
+        opacity: 0;
+        width: 0;
+        margin-left: -10px;
+      }
+      .sidebar-collapsed .sidebar-header h1 {
+        display: none;
+      }
+      /* Icon container styles */
+      .nav-icon-container {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+      }
+
+      .nav-link:hover .nav-icon-container {
+        background-color: rgba(59, 130, 246, 0.1);
+      }
+      .nav-link.active .nav-icon-container {
+        background-color: rgba(59, 130, 246, 0.2);
+      }
+      .dark .nav-link:hover .nav-icon-container {
+        background-color: rgba(59, 130, 246, 0.2);
+      }
+      .dark .nav-link.active .nav-icon-container {
+        background-color: rgba(59, 130, 246, 0.3);
+      }
+      /* Tooltip styles - only show when collapsed */
+      .nav-tooltip {
+        display: none;
+      }
+      .sidebar-collapsed .nav-tooltip {
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .sidebar-collapsed .nav-link:hover .nav-tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+      /* Hamburger icon animation */
+      .hamburger {
+        transition: transform 0.3s;
+      }
+      .sidebar-collapsed .hamburger {
+        transform: rotate(180deg);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 flex">
+    <!-- Sidebar -->
+    <aside
+      class="sidebar h-screen bg-white dark:bg-gray-800 shadow-xl fixed left-0 top-0 z-50 border-r border-gray-200 dark:border-gray-700"
+    >
+      <div
+        class="sidebar-header p-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-700"
+      >
+        <h1
+          class="text-xl font-bold text-gray-800 dark:text-white whitespace-nowrap"
+        >
+          My Portfolio
+        </h1>
+        <button
+          id="sidebarToggle"
+          class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg hamburger"
+        >
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-1">
+          <li>
+            <a
+              href="{% url 'home' %}"
+              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+            >
+              <div class="nav-icon-container mr-3">
+                <i data-lucide="home" class="w-5 h-5"></i>
+              </div>
+              <span class="nav-text font-medium">Home</span>
+              <span
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                >Home</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="{% url 'about' %}"
+              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+            >
+              <div class="nav-icon-container mr-3">
+                <i data-lucide="user" class="w-5 h-5"></i>
+              </div>
+              <span class="nav-text font-medium">About</span>
+              <span
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                >About</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="{% url 'projects' %}"
+              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+            >
+              <div class="nav-icon-container mr-3">
+                <i data-lucide="folder" class="w-5 h-5"></i>
+              </div>
+              <span class="nav-text font-medium">Projects</span>
+              <span
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                >Projects</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="{% url 'certificates' %}"
+              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+            >
+              <div class="nav-icon-container mr-3">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+              </div>
+              <span class="nav-text font-medium">Certificates</span>
+              <span
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                >Certificates</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="{% url 'contact' %}"
+              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+            >
+              <div class="nav-icon-container mr-3">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </div>
+              <span class="nav-text font-medium">Contact</span>
+              <span
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                >Contact</span
+              >
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div
+        class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex justify-center">
+          <button
+            id="themeToggle"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            <i
+              data-lucide="moon"
+              class="w-5 h-5 text-gray-700 dark:text-gray-200 hidden dark:block"
+            ></i>
+            <i
+              data-lucide="sun"
+              class="w-5 h-5 text-gray-700 dark:text-gray-200 block dark:hidden"
+            ></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content min-h-screen p-8">
+      {% block content %} {% endblock %}
+    </main>
+
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Toggle sidebar collapse
+      const sidebar = document.querySelector(".sidebar");
+      const content = document.querySelector(".content");
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const hamburgerIcon = sidebarToggle.querySelector("i");
+
+      // Check localStorage for collapsed state
+      const isCollapsed = localStorage.getItem("sidebarCollapsed") === "true";
+
+      if (isCollapsed) {
+        sidebar.classList.add("sidebar-collapsed");
+        hamburgerIcon.setAttribute("data-lucide", "menu");
+        lucide.createIcons();
+      }
+
+      // Toggle sidebar collapse
+      sidebarToggle.addEventListener("click", function () {
+        sidebar.classList.toggle("sidebar-collapsed");
+
+        // Update icon
+        if (sidebar.classList.contains("sidebar-collapsed")) {
+          hamburgerIcon.setAttribute("data-lucide", "menu");
+          localStorage.setItem("sidebarCollapsed", "true");
+        } else {
+          hamburgerIcon.setAttribute("data-lucide", "menu");
+          localStorage.setItem("sidebarCollapsed", "false");
+        }
+
+        // Refresh icons
+        lucide.createIcons();
+      });
+
+      // Theme toggle
+      document
+        .getElementById("themeToggle")
+        .addEventListener("click", function () {
+          document.documentElement.classList.toggle("dark");
+          localStorage.setItem(
+            "theme",
+            document.documentElement.classList.contains("dark")
+              ? "dark"
+              : "light"
+          );
+        });
+
+      // Check for saved theme preference
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </body>
+</html>
