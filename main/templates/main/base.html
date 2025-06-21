@@ -105,6 +105,15 @@
       .sidebar-collapsed .hamburger {
         transform: rotate(180deg);
       }
+      /* User info styles */
+      .user-info {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sidebar-collapsed .user-info {
+        opacity: 0;
+        width: 0;
+        margin-left: -10px;
+      }
     </style>
   </head>
   <body class="bg-gray-50 dark:bg-gray-900 flex">
@@ -204,25 +213,58 @@
               >
             </a>
           </li>
+         
+          </ul>
+          <!-- Move theme toggle button outside the ul and place it at the bottom above user info -->
+          <div class="absolute bottom-20 left-0 right-0 px-4">
+            <button
+              id="themeToggleNav"
+              class="nav-link w-full flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+            >
+              <div class="nav-icon-container mr-3">
+                <i
+            data-lucide="moon"
+            class="w-5 h-5 text-gray-700 dark:text-gray-200 hidden dark:block"
+                ></i>
+                <i
+            data-lucide="sun"
+            class="w-5 h-5 text-gray-700 dark:text-gray-200 block dark:hidden"
+                ></i>
+              </div>
+              <span class="nav-text font-medium">Toggle Theme</span>
+              <span
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                >Toggle Theme</span
+              >
+            </button>
+          </div>
         </ul>
       </nav>
       <div
-        class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700"
+        class="absolute bottom-0 left-0 right-0 mr-3 p-4 border-t border-gray-200 dark:border-gray-700"
       >
-        <div class="flex justify-center">
-          <button
-            id="themeToggle"
-            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 ml-3 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold mr-3"
           >
-            <i
-              data-lucide="moon"
-              class="w-5 h-5 text-gray-700 dark:text-gray-200 hidden dark:block"
-            ></i>
-            <i
-              data-lucide="sun"
-              class="w-5 h-5 text-gray-700 dark:text-gray-200 block dark:hidden"
-            ></i>
-          </button>
+            {{ user.username|first|upper }}
+          </div>
+          <div class="user-info">
+            <p
+              class="text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap"
+            > 
+              {% if user.is_authenticated %}
+              <!--  -->
+              {{ user.get_full_name|default:user.username }}
+              <!--  -->
+              {% else %} Guest User {% endif %}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              {% if user.is_authenticated %} {{ user.email }}
+              <!--  -->
+              {% else %} Not logged in {% endif %}
+            </p>
+          </div>
         </div>
       </div>
     </aside>
@@ -268,18 +310,14 @@
         lucide.createIcons();
       });
 
-      // Theme toggle
-      document
-        .getElementById("themeToggle")
-        .addEventListener("click", function () {
-          document.documentElement.classList.toggle("dark");
-          localStorage.setItem(
-            "theme",
-            document.documentElement.classList.contains("dark")
-              ? "dark"
-              : "light"
-          );
-        });
+      // Theme toggle functionality
+      function toggleTheme() {
+        document.documentElement.classList.toggle("dark");
+        localStorage.setItem(
+          "theme",
+          document.documentElement.classList.contains("dark") ? "dark" : "light"
+        );
+      }
 
       // Check for saved theme preference
       if (
@@ -289,6 +327,11 @@
       ) {
         document.documentElement.classList.add("dark");
       }
+
+      // Add event listener to theme toggle nav item
+      document
+        .getElementById("themeToggleNav")
+        .addEventListener("click", toggleTheme);
     </script>
   </body>
 </html>

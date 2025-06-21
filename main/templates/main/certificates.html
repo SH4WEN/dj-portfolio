@@ -1,74 +1,83 @@
 {% extends "main/base.html" %} {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7">
-  <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+  <h1
+    class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-6 sm:mb-8"
+  >
     My Certificates
   </h1>
 
   {% if certificates %}
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
     {% for certificate in certificates %}
     <div
-      class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+      class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700"
     >
       <!-- Card Image -->
       <div
-        class="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
+        class="h-40 sm:h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center"
       >
         {% if certificate.image %}
         <img
           src="{{ certificate.image.url }}"
           alt="{{ certificate.title }}"
           class="h-full w-full object-contain p-4"
+          loading="lazy"
         />
         {% else %}
         <i
           data-lucide="certificate"
-          class="w-16 h-16 text-gray-400 dark:text-gray-500"
+          class="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 dark:text-gray-500"
         ></i>
         {% endif %}
       </div>
 
       <!-- Card Body -->
-      <div class="flex-1 p-4">
-        <h3 class="font-semibold text-lg text-gray-800 dark:text-white mb-2">
+      <div class="flex-1 p-4 sm:p-5">
+        <h3
+          class="font-semibold text-lg text-gray-800 dark:text-white mb-2 line-clamp-2"
+        >
           {{ certificate.title }}
         </h3>
-        <p class="text-gray-600 dark:text-gray-300 mb-2">
+        <p class="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base">
           <span class="font-medium">Issued by:</span>
-          <!--  -->
           {{ certificate.issuing_organization }}
         </p>
-        <p class="text-gray-600 dark:text-gray-300">
+        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
           <span class="font-medium">Date:</span>
-          <!--  -->
           {{ certificate.date_issued|date:"F Y" }}
         </p>
       </div>
 
       <!-- Card Footer -->
-      <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700">
+      <div
+        class="px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-600"
+      >
         {% if certificate.credential_url %}
         <a
           href="{{ certificate.credential_url }}"
           target="_blank"
-          class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 text-sm sm:text-base"
         >
           View Credential
           <i data-lucide="external-link" class="w-4 h-4 ml-1"></i>
         </a>
         {% else %}
-        <span class="text-gray-500 dark:text-gray-400 text-sm"
-          >No credential link available</span
-        >
+        <span class="text-gray-500 dark:text-gray-400 text-sm">
+          No credential link available
+        </span>
         {% endif %}
       </div>
     </div>
     {% endfor %}
   </div>
   {% else %}
-  <div class="text-center py-12">
-    <i data-lucide="award" class="w-12 h-12 mx-auto text-gray-400 mb-4"></i>
-    <p class="text-gray-600 dark:text-gray-300">
+  <div class="text-center py-8 sm:py-12">
+    <i
+      data-lucide="award"
+      class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-400 mb-3 sm:mb-4"
+    ></i>
+    <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
       No certificates found in the database.
     </p>
   </div>

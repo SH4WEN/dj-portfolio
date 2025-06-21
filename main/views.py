@@ -1,12 +1,20 @@
 from django.shortcuts import render
-from .models import Project, Certificate
+from .models import About, Profile, Project, Certificate
 
 def home(request):
-    return render(request, 'main/home.html')
+    profile = Profile.objects.first()  # Get the first profile
+    return render(request, 'main/home.html', {'profiles': Profile.objects.all()})
 
 def about(request):
-    return render(request, 'main/about.html')
-
+    try:
+        about_content = About.objects.prefetch_related('educations', 'work_experiences').first()
+    except About.DoesNotExist:
+        about_content = None
+    
+    context = {
+        'about': about_content
+    }
+    return render(request, 'main/about.html', context)
 def projects(request):
     projects = Project.objects.all()
     return render(request, 'main/projects.html', {'projects': projects})

@@ -7,94 +7,83 @@
       About Me
     </h1>
 
+    {% if about %}
     <div class="prose dark:prose-invert max-w-none mb-8">
       <p class="text-gray-600 dark:text-gray-300 mb-4">
-        Hello! I'm John Doe, a passionate web developer with over 5 years of
-        experience building modern web applications. I specialize in Django,
-        Python, and frontend technologies like Tailwind CSS and JavaScript.
+        Hello! I'm {{ about.name }}, {{ about.title }}.
       </p>
-      <p class="text-gray-600 dark:text-gray-300 mb-4">
-        My journey in web development started when I was in college, and since
-        then, I've worked with various startups and established companies to
-        create scalable, user-friendly web applications.
-      </p>
+      <div class="text-gray-600 dark:text-gray-300 mb-4">
+        {{ about.introduction|linebreaks }}
+      </div>
+      {% if about.hobbies_interests %}
       <p class="text-gray-600 dark:text-gray-300">
-        When I'm not coding, you can find me hiking, reading tech blogs, or
-        experimenting with new frameworks and technologies.
+        {{ about.hobbies_interests|linebreaks }}
       </p>
+      {% endif %}
     </div>
 
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
       Education
     </h2>
     <div class="space-y-4 mb-8">
+      {% for education in about.educations.all %}
       <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-start">
           <div>
             <h3 class="font-medium text-gray-800 dark:text-white">
-              Master's in Computer Science
+              {{ education.degree }}
             </h3>
-            <p class="text-gray-600 dark:text-gray-400">Stanford University</p>
+            <p class="text-gray-600 dark:text-gray-400">
+              {{ education.institution }}
+            </p>
           </div>
-          <span class="text-sm text-gray-500 dark:text-gray-400"
-            >2015 - 2017</span
-          >
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            {{ education.start_year }} {% if education.currently_attending %} -
+            Present {% elif education.end_year %} - {{ education.end_year }}
+            <!--  -->
+            {% endif %}
+          </span>
         </div>
+        {% if education.description %}
+        <p class="text-gray-600 dark:text-gray-300 mt-2">
+          {{ education.description }}
+        </p>
+        {% endif %}
       </div>
-      <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-        <div class="flex justify-between items-start">
-          <div>
-            <h3 class="font-medium text-gray-800 dark:text-white">
-              Bachelor's in Software Engineering
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400">MIT</p>
-          </div>
-          <span class="text-sm text-gray-500 dark:text-gray-400"
-            >2011 - 2015</span
-          >
-        </div>
-      </div>
+      {% endfor %}
     </div>
 
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
       Work Experience
     </h2>
     <div class="space-y-4">
+      {% for work in about.work_experiences.all %}
       <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-start">
           <div>
             <h3 class="font-medium text-gray-800 dark:text-white">
-              Senior Web Developer
+              {{ work.position }}
             </h3>
-            <p class="text-gray-600 dark:text-gray-400">TechCorp Inc.</p>
+            <p class="text-gray-600 dark:text-gray-400">{{ work.company }}</p>
           </div>
-          <span class="text-sm text-gray-500 dark:text-gray-400"
-            >2020 - Present</span
-          >
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            {{ work.start_date|date:"Y" }} {% if work.currently_working %} -
+            Present {% elif work.end_date %} - {{ work.end_date|date:"Y" }}
+            <!--  -->
+            {% endif %}
+          </span>
         </div>
         <p class="text-gray-600 dark:text-gray-300 mt-2">
-          Leading a team of developers to build scalable web applications using
-          Django and React.
+          {{ work.description|linebreaks }}
         </p>
       </div>
-      <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-        <div class="flex justify-between items-start">
-          <div>
-            <h3 class="font-medium text-gray-800 dark:text-white">
-              Web Developer
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400">StartUp Ventures</p>
-          </div>
-          <span class="text-sm text-gray-500 dark:text-gray-400"
-            >2017 - 2020</span
-          >
-        </div>
-        <p class="text-gray-600 dark:text-gray-300 mt-2">
-          Developed and maintained multiple web applications, implemented new
-          features, and optimized performance.
-        </p>
-      </div>
+      {% endfor %}
     </div>
+    {% else %}
+    <div class="text-gray-600 dark:text-gray-300">
+      About me content is not available yet.
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
