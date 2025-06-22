@@ -92,3 +92,15 @@ class WorkExperience(models.Model):
     def __str__(self):
         status = "Present" if self.currently_working else self.end_date.strftime("%Y") if self.end_date else ""
         return f"{self.position} at {self.company} ({self.start_date.year} - {status})"
+    
+
+class Skill(models.Model):
+    name = models.CharField(max_length=50)
+    percentage = models.PositiveIntegerField(default=0, help_text="Percentage value (0-100)")
+    order = models.PositiveIntegerField(default=0, help_text="Order in which skills appear")
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return f"{self.name} ({self.percentage}%)"

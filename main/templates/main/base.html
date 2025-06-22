@@ -1,8 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{% static '/main/static/main/favicon-32x32.png'%}" type="image/x-icon">
+
     <title>My Portfolio</title>
     <!-- Tailwind CSS v4.1 via CDN -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
@@ -10,6 +14,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       tailwind.config = {
+
         darkMode: "class",
         theme: {
           extend: {
@@ -257,12 +262,12 @@
               <!--  -->
               {{ user.get_full_name|default:user.username }}
               <!--  -->
-              {% else %} Guest User {% endif %}
+              {% else %} ADMIN {% endif %}
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">
               {% if user.is_authenticated %} {{ user.email }}
               <!--  -->
-              {% else %} Not logged in {% endif %}
+              {% else %} SH4WEN {% endif %}
             </p>
           </div>
         </div>

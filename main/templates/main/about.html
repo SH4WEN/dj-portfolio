@@ -57,6 +57,8 @@
       Work Experience
     </h2>
     <div class="space-y-4">
+      {% if about.work_experiences.all %}
+      <!--  -->
       {% for work in about.work_experiences.all %}
       <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-start">
@@ -70,6 +72,7 @@
             {{ work.start_date|date:"Y" }} {% if work.currently_working %} -
             Present {% elif work.end_date %} - {{ work.end_date|date:"Y" }}
             <!--  -->
+
             {% endif %}
           </span>
         </div>
@@ -77,7 +80,24 @@
           {{ work.description|linebreaks }}
         </p>
       </div>
-      {% endfor %}
+      {% endfor %} {% else %}
+      <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg text-center">
+        <i
+          data-lucide="briefcase"
+          class="w-8 h-8 mx-auto text-gray-400 mb-2"
+        ></i>
+        <p class="text-gray-600 dark:text-gray-300">
+          No work experience added yet. Check back later or view my projects
+          instead.
+        </p>
+        <a
+          href="{% url 'projects' %}"
+          class="text-primary-500 dark:text-primary-400 hover:underline mt-2 inline-block"
+        >
+          View Projects
+        </a>
+      </div>
+      {% endif %}
     </div>
     {% else %}
     <div class="text-gray-600 dark:text-gray-300">

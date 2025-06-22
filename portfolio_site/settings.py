@@ -132,3 +132,12 @@ INTERNAL_IPS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP server
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sarmientosherwin11@gmail.com'  # Your email
+EMAIL_HOST_PASSWORD = 'jvoj wrrz petv ievn'  # Your email password or app password
+DEFAULT_FROM_EMAIL = 'sarmientosherwin11@gmail.com'  # Your email
+CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages

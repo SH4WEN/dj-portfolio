@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, Certificate
+from .models import Project, Certificate, Skill
 
 from .models import About, Education, WorkExperience
 @admin.register(Project)
@@ -62,3 +62,9 @@ class WorkExperienceAdmin(admin.ModelAdmin):
     list_display = ('position', 'company', 'start_date', 'end_date', 'currently_working')
     search_fields = ('position', 'company')
     list_filter = ('currently_working',)
+
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ('name', 'percentage', 'order')
+    list_editable = ('percentage', 'order')
+    ordering = ('order',)

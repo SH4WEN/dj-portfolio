@@ -1,9 +1,22 @@
 from django.shortcuts import render
-from .models import About, Profile, Project, Certificate
+from .models import About, Profile, Project, Certificate, Skill
+from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render, redirect
+from .forms import ContactForm
+from django.contrib import messages
+
+# def home(request):
+#     profile = Profile.objects.first()  # Get the first profile
+#     return render(request, 'main/home.html', {'profiles': Profile.objects.all()})
 
 def home(request):
     profile = Profile.objects.first()  # Get the first profile
-    return render(request, 'main/home.html', {'profiles': Profile.objects.all()})
+    skills = Skill.objects.all().order_by('order')
+    return render(request, 'main/home.html', {
+        'profiles': Profile.objects.all(),
+        'skills': skills
+    })
 
 def about(request):
     try:
@@ -34,4 +47,36 @@ def certificates(request):
         return render(request, 'main/certificates.html', {'certificates': []})
 
 def contact(request):
-    return render(request, 'main/contact.html')
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Get form data
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            
+            # Prepare email content
+            email_subject = f"New Contact Form Submission: {subject}"
+            email_message = f"""
+            Name: {name}
+            Email: {email}
+            Subject: {subject}
+            Message: {message}
+            """
+            
+            # Send email
+            send_mail(
+                email_subject,
+                email_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.CONTACT_EMAIL],  # Your email where you want to receive messages
+                fail_silently=False,
+            )
+            
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('contact')
+    else:
+        form = ContactForm()
+    
+    return render(request, 'main/contact.html', {'form': form})
