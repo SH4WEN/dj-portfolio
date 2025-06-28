@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-h*8+n=3gmtp@w@lbz!@(fc$i1g&euonfyrd(p%m0wr3erg-j(0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://sh4wen.github.io/dj-portfolio/"]
 
 
 # Application definition
