@@ -12,21 +12,22 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h*8+n=3gmtp@w@lbz!@(fc$i1g&euonfyrd(p%m0wr3erg-j(0'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -137,7 +138,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sarmientosherwin11@gmail.com'  # Your email
-EMAIL_HOST_PASSWORD = 'jvoj wrrz petv ievn'  # Your email password or app password
-DEFAULT_FROM_EMAIL = 'sarmientosherwin11@gmail.com'  # Your email
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Your email
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your email password or app password
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Your email
 CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages
+
+
+# Add these settings
+# LOGIN_REDIRECT_URL = 'home'  # Replace 'home' with your desired redirect URL
+# LOGOUT_REDIRECT_URL = 'home'  # Optional: for logout redirect

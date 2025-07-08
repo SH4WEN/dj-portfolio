@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{% static '/main/static/main/favicon-32x32.png'%}" type="image/x-icon">
+    <link rel="icon" href="{% static '/static/main/favicon-32x32.png'%}" type="image/x-icon">
 
     <title>My Portfolio</title>
     <!-- Tailwind CSS v4.1 via CDN -->
@@ -121,11 +121,11 @@
       }
     </style>
   </head>
-  <body class="bg-gray-50 dark:bg-gray-900 flex">
+  <body class="bg-gray-50 dark:bg-gray-900 flex min-h-screen"> 
     <!-- Sidebar -->
     <aside
-      class="sidebar h-screen bg-white dark:bg-gray-800 shadow-xl fixed left-0 top-0 z-50 border-r border-gray-200 dark:border-gray-700"
-    >
+      class="sidebar h-screen bg-white dark:bg-gray-800 shadow-xl fixed left-0 top-0 z-50 border-r border-gray-200 dark:border-gray-700">
+    
       <div
         class="sidebar-header p-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-700"
       >
@@ -246,36 +246,53 @@
         </ul>
       </nav>
       <div
-        class="absolute bottom-0 left-0 right-0 mr-3 p-4 border-t border-gray-200 dark:border-gray-700"
-      >
-        <div class="flex items-center">
-          <div
-            class="w-10 h-10 ml-3 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold mr-3"
-          >
-            {{ user.username|first|upper }}
-          </div>
-          <div class="user-info">
-            <p
-              class="text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap"
-            > 
-              {% if user.is_authenticated %}
-              <!--  -->
-              {{ user.get_full_name|default:user.username }}
-              <!--  -->
-              {% else %} ADMIN {% endif %}
-            </p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
-              {% if user.is_authenticated %} {{ user.email }}
-              <!--  -->
-              {% else %} SH4WEN {% endif %}
-            </p>
-          </div>
-        </div>
-      </div>
+          class="absolute bottom-0 left-0 right-0 mr-3 p-4 border-t border-gray-200 dark:border-gray-700"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 ml-3 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold mr-3"
+              >
+                {{ user.username|first|upper }}
+              </div>
+              <div class="user-info">
+                <p
+                  class="text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap"
+                > 
+                  {% if user.is_authenticated %}
+                  
+                  {{ user.get_full_name|default:user.username }}
+                  <a 
+                    href="{% url 'logout' %}" 
+                    class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    title="Logout"
+                  >
+                    <i data-lucide="log-out" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                  </a>
+                  {% else %} ADMIN {% endif %}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {% if user.is_authenticated %} {{ user.email }}
+                
+                  {% else %} SH4WEN 
+                  <a 
+                  href="/admin/" 
+                  class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  title="Admin Dashboard"
+                  >
+                    <i data-lucide="settings" class="w-5 h-5 float-end text-gray-500 dark:text-gray-400"></i>
+                  </a>{% endif %}
+                </p>
+              </div>
+            </div>
+            
+   
+  </div>
+</div>
     </aside>
 
     <!-- Main Content -->
-    <main class="content min-h-screen p-8">
+    <main class="content w-full min-h-screen p-8 ">
       {% block content %} {% endblock %}
     </main>
 

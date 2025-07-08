@@ -6,6 +6,11 @@ from django.shortcuts import render, redirect
 from .forms import ContactForm
 from django.contrib import messages
 
+
+# views.py
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
 # def home(request):
 #     profile = Profile.objects.first()  # Get the first profile
 #     return render(request, 'main/home.html', {'profiles': Profile.objects.all()})
@@ -80,3 +85,9 @@ def contact(request):
         form = ContactForm()
     
     return render(request, 'main/contact.html', {'form': form})
+
+
+
+def custom_logout(request):
+    logout(request)
+    return redirect('home')  # Redirects to URL named 'home'
