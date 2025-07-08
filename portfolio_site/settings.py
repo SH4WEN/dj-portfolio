@@ -142,8 +142,3 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Your email
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your email password or app password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Your email
 CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages
-
-
-# Add these settings
-# LOGIN_REDIRECT_URL = 'home'  # Replace 'home' with your desired redirect URL
-# LOGOUT_REDIRECT_URL = 'home'  # Optional: for logout redirect
