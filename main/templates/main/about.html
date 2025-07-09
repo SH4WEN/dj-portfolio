@@ -25,12 +25,14 @@
         {{ about.introduction|linebreaks }}
       </div>
 
-      <p
+      {% if about.hobbies_interests %}
+      <div
         class="text-gray-600 dark:text-gray-300 animate-fade-in-up"
         style="animation-delay: 0.4s"
       >
         {{ about.hobbies_interests|linebreaks }}
-      </p>
+      </div>
+      {% endif %}
     </div>
 
     <h2
