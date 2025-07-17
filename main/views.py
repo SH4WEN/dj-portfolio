@@ -17,10 +17,12 @@ from django.shortcuts import redirect
 
 def home(request):
     profile = Profile.objects.first()  # Get the first profile
+    projects = Project.objects.all().order_by('-created_at')[:4] 
     skills = Skill.objects.all().order_by('order')
     return render(request, 'main/home.html', {
         'profiles': Profile.objects.all(),
-        'skills': skills
+        'skills': skills,
+        'projects': Project.objects.all(),
     })
 
 def about(request):

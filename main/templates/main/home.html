@@ -122,74 +122,121 @@
       </div>
     </div>
 
-    <!-- Quick Links Card -->
-    <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 animate-fade-in-up"
-      style="animation-delay: 0.6s"
+    <!-- Projects Card -->
+
+
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 animate-fade-in-up" style="animation-delay: 0.6s">
+  <h3 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center">
+    <i data-lucide="briefcase" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500"></i>
+    Latest Projects
+  </h3>
+
+  <!-- 2-column grid layout -->
+  <div class="grid grid-cols-2 cursor-pointer gap-2 sm:gap-4">
+    {% for project in projects %}
+    <div 
+      class="aspect-square relative group overflow-hidden rounded-lg"
+      onclick="openProjectModal(
+        '{{ project.title|escapejs }}', 
+        '{{ project.description|escapejs }}', 
+        '{{ project.created_at|date:"M Y" }}', 
+        '{% if project.image %}{{ project.image.url }}{% else %}{% static "path/to/default-image.jpg" %}{% endif %}'
+      )"
     >
-      <h3
-        class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center"
-      >
-        <i
-          data-lucide="briefcase"
-          class="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500"
-        ></i>
-        Quick Links
-      </h3>
-      <div class="grid grid-cols-2 gap-2 sm:gap-4">
-        <a
-          href="{% url 'projects' %}"
-          class="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex flex-col items-center"
+      {% if project.image %}
+      <img
+        src="{{ project.image.url }}"
+        alt="{{ project.title }}"
+        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+      />
+      <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <p class="text-white font-medium text-center px-2">
+          {{ project.title }}
+        </p>
+      </div>
+      {% else %}
+      <div class="w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-700">
+        <i data-lucide="image" class="w-16 h-16 text-gray-400 animate-pulse"></i>
+        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm text-center px-2">
+          {{ project.title }}
+        </p>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Project Modal -->
+<div id="projectModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+      <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
+    </div>
+    
+    <!-- Modal content -->
+    <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+      <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+            <div class="flex justify-between items-start">
+              <h3 id="modalTitle" class="text-lg leading-6 font-medium text-gray-900 dark:text-white"></h3>
+              <span id="modalDate" class="text-sm text-gray-500 dark:text-gray-400"></span>
+            </div>
+            <div class="mt-4">
+              <img id="modalImage" src="" alt="" class="w-full h-48 object-cover rounded-lg mb-4">
+              <p id="modalDescription" class="text-sm text-gray-500 dark:text-gray-300"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button 
+          type="button" 
+          onclick="closeProjectModal()"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
         >
-          <i
-            data-lucide="folder"
-            class="w-6 h-6 sm:w-8 sm:h-8 text-primary-500 mb-1 sm:mb-2"
-          ></i>
-          <span class="text-xs sm:text-sm text-gray-700 dark:text-gray-300"
-            >Projects</span
-          >
-        </a>
-        <a
-          href="{% url 'certificates' %}"
-          class="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex flex-col items-center"
-        >
-          <i
-            data-lucide="file-text"
-            class="w-6 h-6 sm:w-8 sm:h-8 text-primary-500 mb-1 sm:mb-2"
-          ></i>
-          <span class="text-xs sm:text-sm text-gray-700 dark:text-gray-300"
-            >Certificates</span
-          >
-        </a>
-        <a
-          href="#"
-          class="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex flex-col items-center"
-        >
-          <i
-            data-lucide="github"
-            class="w-6 h-6 sm:w-8 sm:h-8 text-primary-500 mb-1 sm:mb-2"
-          ></i>
-          <span class="text-xs sm:text-sm text-gray-700 dark:text-gray-300"
-            >GitHub</span
-          >
-        </a>
-        <a
-          href="{% url 'contact' %}"
-          class="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex flex-col items-center"
-        >
-          <i
-            data-lucide="mail"
-            class="w-6 h-6 sm:w-8 sm:h-8 text-primary-500 mb-1 sm:mb-2"
-          ></i>
-          <span class="text-xs sm:text-sm text-gray-700 dark:text-gray-300"
-            >Contact</span
-          >
-        </a>
+          Close
+        </button>
       </div>
     </div>
   </div>
+</div>
+
+
+
+  </div>
   {% endwith %}
 </div>
+<script>
+  function openProjectModal(title, description, date, imageUrl) {
+    const modal = document.getElementById('projectModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDescription').textContent = description;
+    document.getElementById('modalDate').textContent = date;
+    
+    const imageElement = document.getElementById('modalImage');
+    imageElement.src = imageUrl;
+    imageElement.style.display = imageUrl ? 'block' : 'none';
+    
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeProjectModal() {
+    document.getElementById('projectModal').classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+
+  // Close modal when clicking outside of it
+  window.addEventListener('click', function(event) {
+    const modal = document.getElementById('projectModal');
+    if (event.target === modal) {
+      closeProjectModal();
+    }
+  });
+</script>
 
 <style>
   @keyframes fadeInUp {
