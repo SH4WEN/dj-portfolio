@@ -24,7 +24,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=100, blank=True, default="")
     title = models.CharField(max_length=200, blank=True, default="")  # This is the missing field
     bio = models.TextField(blank=True, default="")
-    image = models.ImageField(upload_to='profile_pics', blank=True, null=True)
+    image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     cv = models.FileField(upload_to='cvs/', blank=True, null=True)
     
     def __str__(self):
