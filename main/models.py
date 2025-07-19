@@ -1,9 +1,13 @@
 from django.db import models
 from django.utils.text import slugify
+from django.db import models
+from cloudinary.models import CloudinaryField
+
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField(upload_to='projects/')
+     # Changed to CloudinaryField
+    image = CloudinaryField('image', folder='projects', blank=True, null=True )
     url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -15,20 +19,26 @@ class Certificate(models.Model):
     issuing_organization = models.CharField(max_length=200)
     date_issued = models.DateField()
     credential_url = models.URLField(blank=True, null=True)
-    image = models.ImageField(upload_to='certificates/', blank=True, null=True)
+    # Changed to CloudinaryField
+    image = CloudinaryField('image', folder='certificates', blank=True, null=True)
     
     def __str__(self):
         return self.title
     
+
+
 class Profile(models.Model):
     name = models.CharField(max_length=100, blank=True, default="")
-    title = models.CharField(max_length=200, blank=True, default="")  # This is the missing field
+    title = models.CharField(max_length=200, blank=True, default="")
     bio = models.TextField(blank=True, default="")
-    image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    cv = models.FileField(upload_to='cvs/', blank=True, null=True)
+    
+    # Replace ImageField with CloudinaryField for images
+    image = CloudinaryField('image', folder='profile_pics', blank=True, null=True)
+    
+    # Replace FileField with CloudinaryField for files
+    cv = CloudinaryField('file', folder='cvs', resource_type='raw', blank=True, null=True)
     
     def __str__(self):
-        return self.name
         return self.name
     
 class About(models.Model):
