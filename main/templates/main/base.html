@@ -40,6 +40,63 @@
       body {
         font-family: "Inter", sans-serif;
       }
+
+      /* Neumorphism tokens */
+      :root {
+        --neu-bg: #ecf0f3;
+        --neu-bg-accent: #e6eaee;
+        --neu-text: #2b2f36;
+        --neu-primary: #3b82f6;
+        --neu-shadow-dark: #b9c3cf;
+        --neu-shadow-light: #ffffff;
+        --neu-radius: 16px;
+        --neu-inset-shadow: inset 6px 6px 12px var(--neu-shadow-dark), inset -6px -6px 12px var(--neu-shadow-light);
+        --neu-outset-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
+        --neu-soft-shadow: 4px 4px 8px var(--neu-shadow-dark), -4px -4px 8px var(--neu-shadow-light);
+      }
+      .dark :root, :root.dark {
+        --neu-bg: #0f172a; /* slate-900 */
+        --neu-bg-accent: #111827; /* gray-900 */
+        --neu-text: #e5e7eb; /* gray-200 */
+        --neu-primary: #60a5fa;
+        --neu-shadow-dark: rgba(0, 0, 0, 0.55);
+        --neu-shadow-light: rgba(255, 255, 255, 0.06);
+      }
+
+      /* Neumorphism utilities */
+      .neu-surface {
+        background: var(--neu-bg);
+        color: var(--neu-text);
+        border-radius: var(--neu-radius);
+        box-shadow: var(--neu-outset-shadow);
+      }
+      .neu-pressed {
+        box-shadow: var(--neu-inset-shadow);
+      }
+      .neu-soft {
+        box-shadow: var(--neu-soft-shadow);
+      }
+      .neu-button {
+        background: var(--neu-bg);
+        color: var(--neu-text);
+        border-radius: 14px;
+        box-shadow: var(--neu-outset-shadow);
+        transition: transform 0.1s ease, box-shadow 0.2s ease;
+      }
+      .neu-button:hover {
+        transform: translateY(-1px);
+      }
+      .neu-button:active {
+        transform: translateY(0);
+        box-shadow: var(--neu-inset-shadow);
+      }
+      .neu-pill {
+        border-radius: 9999px;
+      }
+      .neu-active {
+        background: var(--neu-bg-accent);
+        box-shadow: var(--neu-inset-shadow);
+      }
       .sidebar {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 260px;
@@ -165,17 +222,19 @@
       }
     </style>
   </head>
-  <body class="bg-gray-50 dark:bg-gray-900 flex min-h-screen">
+  <body class="flex min-h-screen" style="background: var(--neu-bg); color: var(--neu-text);">
     <!-- Sidebar Overlay (for mobile) -->
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
     <!-- Sidebar -->
     <aside
       id="sidebar"
-      class="sidebar h-screen bg-white dark:bg-gray-800 shadow-xl fixed left-0 top-0 z-50 border-r border-gray-200 dark:border-gray-700"
+      class="sidebar h-screen fixed left-0 top-0 z-50"
+      style="background: var(--neu-bg); box-shadow: var(--neu-outset-shadow); border-radius: 0 var(--neu-radius) var(--neu-radius) 0;"
     >
       <div
-        class="sidebar-header p-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-700"
+        class="sidebar-header p-5 flex items-center justify-between"
+        style="box-shadow: var(--neu-inset-shadow); border-radius: 0 var(--neu-radius) 0 0;"
       >
         <h1
           class="text-xl font-bold text-gray-800 dark:text-white whitespace-nowrap"
@@ -184,7 +243,7 @@
         </h1>
         <button
           id="sidebarToggle"
-          class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg hamburger"
+          class="p-2 hamburger neu-button neu-pill"
         >
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -195,14 +254,14 @@
           <li>
             <a
               href="{% url 'home' %}"
-              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+              class="nav-link flex items-center p-3 rounded-lg transition-colors group relative neu-surface"
             >
               <div class="nav-icon-container mr-3">
                 <i data-lucide="home" class="w-5 h-5"></i>
               </div>
               <span class="nav-text font-medium">Home</span>
               <span
-                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md whitespace-nowrap neu-surface neu-soft"
                 >Home</span
               >
             </a>
@@ -210,14 +269,14 @@
           <li>
             <a
               href="{% url 'about' %}"
-              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+              class="nav-link flex items-center p-3 rounded-lg transition-colors group relative neu-surface"
             >
               <div class="nav-icon-container mr-3">
                 <i data-lucide="user" class="w-5 h-5"></i>
               </div>
               <span class="nav-text font-medium">About</span>
               <span
-                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md whitespace-nowrap neu-surface neu-soft"
                 >About</span
               >
             </a>
@@ -225,14 +284,14 @@
           <li>
             <a
               href="{% url 'projects' %}"
-              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+              class="nav-link flex items-center p-3 rounded-lg transition-colors group relative neu-surface"
             >
               <div class="nav-icon-container mr-3">
                 <i data-lucide="folder" class="w-5 h-5"></i>
               </div>
               <span class="nav-text font-medium">Projects</span>
               <span
-                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md whitespace-nowrap neu-surface neu-soft"
                 >Projects</span
               >
             </a>
@@ -240,14 +299,14 @@
           <li>
             <a
               href="{% url 'certificates' %}"
-              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+              class="nav-link flex items-center p-3 rounded-lg transition-colors group relative neu-surface"
             >
               <div class="nav-icon-container mr-3">
                 <i data-lucide="file-text" class="w-5 h-5"></i>
               </div>
               <span class="nav-text font-medium">Certificates</span>
               <span
-                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md whitespace-nowrap neu-surface neu-soft"
                 >Certificates</span
               >
             </a>
@@ -255,14 +314,14 @@
           <li>
             <a
               href="{% url 'contact' %}"
-              class="nav-link flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+              class="nav-link flex items-center p-3 rounded-lg transition-colors group relative neu-surface"
             >
               <div class="nav-icon-container mr-3">
                 <i data-lucide="mail" class="w-5 h-5"></i>
               </div>
               <span class="nav-text font-medium">Contact</span>
               <span
-                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md whitespace-nowrap neu-surface neu-soft"
                 >Contact</span
               >
             </a>
@@ -272,7 +331,7 @@
           <li class="absolute bottom-20 left-0 right-0 px-4">
             <button
               id="themeToggleNav"
-              class="nav-link w-full flex items-center p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group relative"
+              class="nav-link w-full flex items-center p-3 rounded-lg transition-colors group relative neu-surface"
             >
               <div class="nav-icon-container mr-3">
                 <i
@@ -286,7 +345,7 @@
               </div>
               <span class="nav-text font-medium">Toggle Theme</span>
               <span
-                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md bg-gray-800 text-white whitespace-nowrap shadow-lg"
+                class="nav-tooltip absolute left-full ml-2 px-3 py-1.5 text-sm rounded-md whitespace-nowrap neu-surface neu-soft"
                 >Toggle Theme</span
               >
             </button>
@@ -296,12 +355,14 @@
 
       <!-- User info section -->
       <footer
-        class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700"
+        class="absolute bottom-0 left-0 right-0 p-4"
+        style="box-shadow: var(--neu-inset-shadow);"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center">
             <div
-              class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold mr-3"
+              class="w-10 h-10 rounded-full flex items-center justify-center font-semibold mr-3"
+              style="background: var(--neu-bg); color: var(--neu-primary); box-shadow: var(--neu-outset-shadow);"
             >
               {{ user.username|first|upper }}
             </div>
@@ -327,7 +388,7 @@
             {% if user.is_authenticated %}
             <a
               href="{% url 'logout' %}"
-              class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors logout-icon"
+              class="p-2 rounded-lg logout-icon neu-button"
               title="Logout"
             >
               <i
@@ -338,7 +399,7 @@
             {% else %}
             <a
               href="/admin/"
-              class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors settings-icon"
+              class="p-2 rounded-lg settings-icon neu-button"
               title="Admin Dashboard"
             >
               <i
@@ -357,7 +418,7 @@
       <!-- Mobile menu button (hidden on desktop) -->
       <button
         id="mobileMenuButton"
-        class="fixed top-4 left-4 z-30 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors md:hidden"
+        class="fixed top-4 left-4 z-30 p-2 rounded-lg md:hidden neu-button"
       >
         <i data-lucide="menu" class="w-5 h-5"></i>
       </button>

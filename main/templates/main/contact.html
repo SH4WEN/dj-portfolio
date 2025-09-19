@@ -1,7 +1,7 @@
 {% extends "main/base.html" %} {% block content %}
 <div class="max-w-7xl mx-auto">
   <div
-    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden p-8 mb-8"
+    class="rounded-xl overflow-hidden p-8 mb-8 neu-surface"
   >
     <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">
       Contact Me
@@ -41,7 +41,7 @@
         <div class="space-y-4">
           <div class="flex items-start">
             <div
-              class="bg-primary-100 dark:bg-primary-900 p-3 rounded-full mr-4"
+              class="p-3 rounded-full mr-4 neu-button neu-pill"
             >
               <i data-lucide="mail" class="w-5 h-5 text-primary-500"></i>
             </div>
@@ -55,7 +55,7 @@
 
           <div class="flex items-start">
             <div
-              class="bg-primary-100 dark:bg-primary-900 p-3 rounded-full mr-4"
+              class="p-3 rounded-full mr-4 neu-button neu-pill"
             >
               <i data-lucide="phone" class="w-5 h-5 text-primary-500"></i>
             </div>
@@ -67,7 +67,7 @@
 
           <div class="flex items-start">
             <div
-              class="bg-primary-100 dark:bg-primary-900 p-3 rounded-full mr-4"
+              class="p-3 rounded-full mr-4 neu-button neu-pill"
             >
               <i data-lucide="map-pin" class="w-5 h-5 text-primary-500"></i>
             </div>
@@ -87,7 +87,7 @@
           <div class="flex space-x-4">
             <a
               href="https://github.com/SH4WEN"
-              class="bg-gray-100 dark:bg-gray-700 p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              class="p-3 rounded-full transition-colors neu-button neu-pill"
             >
               <i
                 data-lucide="github"
@@ -96,7 +96,7 @@
             </a>
             <a
               href="https://www.facebook.com/sherwin.sarmiento.9678?mibextid=ZbWKwL"
-              class="bg-gray-100 dark:bg-gray-700 p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              class="p-3 rounded-full transition-colors neu-button neu-pill"
             >
               <i
                 data-lucide="facebook"
@@ -105,7 +105,7 @@
             </a>
             <a
               href="#"
-              class="bg-gray-100 dark:bg-gray-700 p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              class="p-3 rounded-full transition-colors neu-button neu-pill"
             >
               <i
                 data-lucide="youtube"
@@ -116,7 +116,7 @@
         </div>
       </div>
 
-      <div>
+          <div>
         <form method="post" class="space-y-4">
           {% csrf_token %}
 
@@ -130,7 +130,7 @@
               type="text"
               id="name"
               name="name"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              class="w-full px-4 py-2 rounded-lg neu-surface dark:text-black neu-pressed"
               required
             />
           </div>
@@ -145,7 +145,7 @@
               type="email"
               id="email"
               name="email"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              class="w-full px-4 py-2 dark:text-black rounded-lg neu-surface neu-pressed"
               required
             />
           </div>
@@ -160,7 +160,7 @@
               type="text"
               id="subject"
               name="subject"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              class="w-full px-4 py-2 rounded-lg dark:text-black neu-surface neu-pressed"
               required
             />
           </div>
@@ -175,14 +175,14 @@
               id="message"
               name="message"
               rows="4"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              class="w-full px-4 py-2 rounded-lg neu-surface neu-pressed"
               required
             ></textarea>
           </div>
 
           <button
             type="submit"
-            class="w-full px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+            class="w-full px-4 py-2 rounded-lg neu-button"
           >
             Send Message
           </button>
