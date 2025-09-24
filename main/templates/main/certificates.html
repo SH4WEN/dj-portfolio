@@ -1,19 +1,17 @@
 {% extends "main/base.html" %} {% block content %}
-<div class="max-w-8xl mx-auto">
+<div class="max-w-7xl mx-auto px-2 sm:px-4">
   <div
-    class="rounded-xl overflow-hidden p-4 sm:p-6 md:p-8 mb-8 transition-all duration-300 transform neu-surface"
+    class="rounded-xl overflow-hidden p-4 sm:p-6 md:p-8 mb-6 md:mb-8 transition-all duration-300 transform neu-surface"
   >
     <h1
       style="animation-delay: 0.1s"
-      class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6 md:mb-8 animate-fade-in-up"
+      class="text-2xl sm:text-3xl md:text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6 md:mb-8 animate-fade-in-up"
     >
       My Certificates
     </h1>
 
     {% if certificates %}
-    <div
-      class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6"
-    >
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       {% for certificate in certificates %}
       <div
         class="flex flex-col h-full rounded-lg overflow-hidden transition-all duration-300 transform hover:-translate-y-1 w-full animate-fade-in-up neu-surface"
@@ -21,38 +19,38 @@
       >
         <!-- Card Image -->
         <div
-          class="h-32 xs:h-36 sm:h-40 md:h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center w-full overflow-hidden"
+          class="h-40 sm:h-44 md:h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center w-full overflow-hidden"
         >
           {% if certificate.image %}
           <img
             src="{{ certificate.image.url }}"
             alt="{{ certificate.title }}"
-            class="h-full w-full object-contain p-2 sm:p-4 transition-transform duration-500 hover:scale-105"
+            class="h-full w-full object-contain p-2 sm:p-3 md:p-4 transition-transform duration-500 hover:scale-105"
             loading="lazy"
           />
           {% else %}
           <i
             data-lucide="certificate"
-            class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 text-gray-400 dark:text-gray-500 animate-pulse"
+            class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-gray-400 dark:text-gray-500 animate-pulse"
           ></i>
           {% endif %}
         </div>
 
         <!-- Card Body -->
-        <div class="flex-1 p-2 sm:p-4 md:p-5">
+        <div class="flex-1 p-3 sm:p-4 md:p-5">
           <h3
-            class="font-semibold text-base sm:text-lg md:text-xl text-gray-800 dark:text-white mb-1 sm:mb-2 line-clamp-2 transition-colors duration-300 hover:text-primary-500 dark:hover:text-primary-400"
+            class="font-semibold text-base sm:text-lg md:text-xl text-gray-800 dark:text-white mb-2 sm:mb-3 line-clamp-2 transition-colors duration-300 hover:text-primary-500 dark:hover:text-primary-400 leading-tight"
           >
             {{ certificate.title }}
           </h3>
           <p
-            class="text-gray-600 dark:text-gray-300 mb-1 sm:mb-2 text-xs sm:text-sm md:text-base"
+            class="text-gray-600 dark:text-gray-300 mb-2 sm:mb-3 text-sm sm:text-base md:text-base"
           >
             <span class="font-medium">Issued by:</span>
             {{ certificate.issuing_organization }}
           </p>
           <p
-            class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm md:text-base"
+            class="text-gray-600 dark:text-gray-300 text-sm sm:text-base md:text-base"
           >
             <span class="font-medium">Date:</span>
             {{ certificate.date_issued|date:"F Y" }}
@@ -61,23 +59,23 @@
 
         <!-- Card Footer -->
         <div
-          class="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 neu-surface neu-pressed"
+          class="px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-4 neu-surface neu-pressed"
         >
           {% if certificate.credential_url %}
           <a
             href="{{ certificate.credential_url }}"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 text-xs sm:text-sm md:text-base transition-colors duration-300 group"
+            class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 text-sm sm:text-base md:text-base transition-colors duration-300 group font-medium"
           >
             View Credential
             <i
               data-lucide="external-link"
-              class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1"
+              class="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1"
             ></i>
           </a>
           {% else %}
-          <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
+          <span class="text-gray-500 dark:text-gray-400 text-sm sm:text-base">
             No credential link available
           </span>
           {% endif %}
@@ -86,13 +84,13 @@
       {% endfor %}
     </div>
     {% else %}
-    <div class="text-center py-6 sm:py-8 md:py-12 animate-fade-in">
+    <div class="text-center py-8 sm:py-12 md:py-16 animate-fade-in">
       <i
         data-lucide="award"
-        class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto text-gray-400 mb-2 sm:mb-3 md:mb-4 animate-bounce"
+        class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto text-gray-400 mb-3 sm:mb-4 md:mb-6 animate-bounce"
       ></i>
       <p
-        class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm md:text-base"
+        class="text-gray-600 dark:text-gray-300 text-sm sm:text-base md:text-lg"
       >
         No certificates yet!.
       </p>

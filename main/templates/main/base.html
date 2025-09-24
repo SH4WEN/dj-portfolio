@@ -50,11 +50,15 @@
         --neu-shadow-dark: #b9c3cf;
         --neu-shadow-light: #ffffff;
         --neu-radius: 16px;
-        --neu-inset-shadow: inset 6px 6px 12px var(--neu-shadow-dark), inset -6px -6px 12px var(--neu-shadow-light);
-        --neu-outset-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
-        --neu-soft-shadow: 4px 4px 8px var(--neu-shadow-dark), -4px -4px 8px var(--neu-shadow-light);
+        --neu-inset-shadow: inset 6px 6px 12px var(--neu-shadow-dark),
+          inset -6px -6px 12px var(--neu-shadow-light);
+        --neu-outset-shadow: 8px 8px 16px var(--neu-shadow-dark),
+          -8px -8px 16px var(--neu-shadow-light);
+        --neu-soft-shadow: 4px 4px 8px var(--neu-shadow-dark),
+          -4px -4px 8px var(--neu-shadow-light);
       }
-      .dark :root, :root.dark {
+      .dark :root,
+      :root.dark {
         --neu-bg: #0f172a; /* slate-900 */
         --neu-bg-accent: #111827; /* gray-900 */
         --neu-text: #e5e7eb; /* gray-200 */
@@ -200,10 +204,63 @@
         }
         .content {
           margin-left: 0 !important;
+          padding: 1rem;
         }
         .mobile-menu-button {
           display: block !important;
         }
+      }
+
+      /* Small mobile devices */
+      @media (max-width: 480px) {
+        .content {
+          padding: 0.75rem;
+        }
+        .sidebar {
+          width: 280px;
+        }
+      }
+
+      /* Touch-friendly enhancements */
+      @media (hover: none) and (pointer: coarse) {
+        .nav-link {
+          padding: 0.875rem;
+          min-height: 48px;
+        }
+        .neu-button {
+          min-height: 44px;
+          padding: 0.625rem 1rem;
+        }
+      }
+
+      /* Improve line-height and readability */
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Better focus states for accessibility */
+      .neu-button:focus,
+      .nav-link:focus {
+        outline: 2px solid var(--neu-primary);
+        outline-offset: 2px;
+      }
+
+      /* Smooth transitions for theme switching */
+      * {
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      /* Prevent text selection on interactive elements */
+      .neu-button,
+      .nav-link {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
       /* Overlay for mobile */
@@ -222,7 +279,10 @@
       }
     </style>
   </head>
-  <body class="flex min-h-screen" style="background: var(--neu-bg); color: var(--neu-text);">
+  <body
+    class="flex min-h-screen"
+    style="background: var(--neu-bg); color: var(--neu-text)"
+  >
     <!-- Sidebar Overlay (for mobile) -->
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
@@ -230,21 +290,25 @@
     <aside
       id="sidebar"
       class="sidebar h-screen fixed left-0 top-0 z-50"
-      style="background: var(--neu-bg); box-shadow: var(--neu-outset-shadow); border-radius: 0 var(--neu-radius) var(--neu-radius) 0;"
+      style="
+        background: var(--neu-bg);
+        box-shadow: var(--neu-outset-shadow);
+        border-radius: 0 var(--neu-radius) var(--neu-radius) 0;
+      "
     >
       <div
         class="sidebar-header p-5 flex items-center justify-between"
-        style="box-shadow: var(--neu-inset-shadow); border-radius: 0 var(--neu-radius) 0 0;"
+        style="
+          box-shadow: var(--neu-inset-shadow);
+          border-radius: 0 var(--neu-radius) 0 0;
+        "
       >
         <h1
           class="text-xl font-bold text-gray-800 dark:text-white whitespace-nowrap"
         >
           My Portfolio
         </h1>
-        <button
-          id="sidebarToggle"
-          class="p-2 hamburger neu-button neu-pill"
-        >
+        <button id="sidebarToggle" class="p-2 hamburger neu-button neu-pill">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
       </div>
@@ -356,13 +420,17 @@
       <!-- User info section -->
       <footer
         class="absolute bottom-0 left-0 right-0 p-4"
-        style="box-shadow: var(--neu-inset-shadow);"
+        style="box-shadow: var(--neu-inset-shadow)"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center font-semibold mr-3"
-              style="background: var(--neu-bg); color: var(--neu-primary); box-shadow: var(--neu-outset-shadow);"
+              style="
+                background: var(--neu-bg);
+                color: var(--neu-primary);
+                box-shadow: var(--neu-outset-shadow);
+              "
             >
               {{ user.username|first|upper }}
             </div>
@@ -414,14 +482,18 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="content w-full min-h-screen p-8">
+    <main class="content w-full min-h-screen p-4 sm:p-6 md:p-8">
       <!-- Mobile menu button (hidden on desktop) -->
       <button
         id="mobileMenuButton"
-        class="fixed top-4 left-4 z-30 p-2 rounded-lg md:hidden neu-button"
+        class="fixed top-4 left-4 z-30 p-3 rounded-lg md:hidden neu-button shadow-lg"
+        style="min-height: 48px; min-width: 48px"
       >
         <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
+
+      <!-- Mobile spacing for content -->
+      <div class="md:hidden h-16"></div>
 
       {% block content %} {% endblock %}
     </main>
@@ -439,17 +511,20 @@
       const hamburgerIcon = sidebarToggle.querySelector("i");
 
       // Check if mobile view
-      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      function isMobile() {
+        return window.matchMedia("(max-width: 768px)").matches;
+      }
 
       // Check localStorage for collapsed state
       const isCollapsed = localStorage.getItem("sidebarCollapsed") === "true";
 
       // Initialize sidebar state
       function initSidebar() {
-        if (isMobile) {
+        if (isMobile()) {
           // On mobile, start with sidebar hidden
           sidebar.classList.remove("mobile-expanded");
           sidebarOverlay.classList.remove("active");
+          document.body.classList.remove("overflow-hidden");
         } else {
           // On desktop, respect the saved collapsed state
           if (isCollapsed) {
@@ -465,10 +540,11 @@
 
       // Toggle sidebar collapse (desktop)
       sidebarToggle.addEventListener("click", function () {
-        if (isMobile) {
+        if (isMobile()) {
           // On mobile, clicking the toggle should close the sidebar
           sidebar.classList.remove("mobile-expanded");
           sidebarOverlay.classList.remove("active");
+          document.body.classList.remove("overflow-hidden");
         } else {
           // On desktop, toggle collapsed state
           sidebar.classList.toggle("sidebar-collapsed");
@@ -491,32 +567,54 @@
       mobileMenuButton.addEventListener("click", function () {
         sidebar.classList.add("mobile-expanded");
         sidebarOverlay.classList.add("active");
+        document.body.classList.add("overflow-hidden");
       });
 
       // Close sidebar when clicking overlay
       sidebarOverlay.addEventListener("click", function () {
         sidebar.classList.remove("mobile-expanded");
         sidebarOverlay.classList.remove("active");
+        document.body.classList.remove("overflow-hidden");
       });
 
       // Close sidebar when clicking a nav link on mobile
       document.querySelectorAll(".nav-link").forEach((link) => {
         link.addEventListener("click", function () {
-          if (isMobile) {
+          if (isMobile()) {
             sidebar.classList.remove("mobile-expanded");
             sidebarOverlay.classList.remove("active");
+            document.body.classList.remove("overflow-hidden");
           }
         });
       });
 
       // Handle window resize
+      let resizeTimeout;
       window.addEventListener("resize", function () {
-        const nowMobile = window.matchMedia("(max-width: 768px)").matches;
-        if (nowMobile !== isMobile) {
-          // Viewport size crossed the mobile threshold
-          initSidebar();
-        }
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const nowMobile = isMobile();
+          // Reset sidebar state when switching between mobile/desktop
+          if (nowMobile) {
+            sidebar.classList.remove("mobile-expanded");
+            sidebarOverlay.classList.remove("active");
+            document.body.classList.remove("overflow-hidden");
+          } else {
+            sidebar.classList.remove("mobile-expanded");
+            sidebarOverlay.classList.remove("active");
+            document.body.classList.remove("overflow-hidden");
+          }
+        }, 100);
       });
+
+      // Prevent body scroll when sidebar is open on mobile
+      function preventBodyScroll(prevent) {
+        if (prevent) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+      }
 
       // Theme toggle functionality
       function toggleTheme() {
