@@ -1,7 +1,7 @@
 {% extends "main/base.html" %} {% block content %}
 <div class="max-w-7xl mx-auto px-2 sm:px-4">
   <div
-    class="rounded-xl overflow-hidden p-4 sm:p-6 md:p-8 mb-6 md:mb-8 neu-surface"
+    class="rounded-xl overflow-hidden p-4 sm:p-6 md:p-8 mb-6 md:mb-8 neu-surface friendly-shadow friendly-hover"
   >
     <h1
       class="text-2xl sm:text-3xl md:text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6"
@@ -47,7 +47,7 @@
         <div class="space-y-3 sm:space-y-4">
           <div class="flex items-start">
             <div
-              class="p-3 rounded-full mr-3 sm:mr-4 neu-button neu-pill flex-shrink-0"
+              class="p-3 rounded-full mr-3 sm:mr-4 neu-button neu-pill flex-shrink-0 friendly-hover"
             >
               <i
                 data-lucide="mail"
@@ -70,7 +70,7 @@
 
           <div class="flex items-start">
             <div
-              class="p-3 rounded-full mr-3 sm:mr-4 neu-button neu-pill flex-shrink-0"
+              class="p-3 rounded-full mr-3 sm:mr-4 neu-button neu-pill flex-shrink-0 friendly-hover"
             >
               <i
                 data-lucide="phone"
@@ -91,7 +91,7 @@
 
           <div class="flex items-start">
             <div
-              class="p-3 rounded-full mr-3 sm:mr-4 neu-button neu-pill flex-shrink-0"
+              class="p-3 rounded-full mr-3 sm:mr-4 neu-button neu-pill flex-shrink-0 friendly-hover"
             >
               <i
                 data-lucide="map-pin"
@@ -120,7 +120,7 @@
           <div class="flex space-x-3 sm:space-x-4">
             <a
               href="https://github.com/SH4WEN"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center"
+              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -131,7 +131,7 @@
             </a>
             <a
               href="https://www.facebook.com/sherwin.sarmiento.9678?mibextid=ZbWKwL"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center"
+              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -142,7 +142,7 @@
             </a>
             <a
               href="#"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center"
+              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
             >
               <i
                 data-lucide="youtube"
@@ -167,7 +167,7 @@
               type="text"
               id="name"
               name="name"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg neu-surface dark:text-black neu-pressed text-sm sm:text-base min-h-[44px]"
+              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg neu-surface dark:text-black neu-pressed text-sm sm:text-base min-h-[44px] friendly-hover"
               required
             />
           </div>
@@ -182,7 +182,7 @@
               type="email"
               id="email"
               name="email"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 dark:text-black rounded-lg neu-surface neu-pressed text-sm sm:text-base min-h-[44px]"
+              class="w-full px-3 sm:px-4 py-3 sm:py-3 dark:text-black rounded-lg neu-surface neu-pressed text-sm sm:text-base min-h-[44px] friendly-hover"
               required
             />
           </div>
@@ -197,7 +197,7 @@
               type="text"
               id="subject"
               name="subject"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg dark:text-black neu-surface neu-pressed text-sm sm:text-base min-h-[44px]"
+              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg dark:text-black neu-surface neu-pressed text-sm sm:text-base min-h-[44px] friendly-hover"
               required
             />
           </div>
@@ -212,16 +212,19 @@
               id="message"
               name="message"
               rows="4"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg neu-surface neu-pressed text-sm sm:text-base min-h-[120px] resize-y"
+              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg neu-surface neu-pressed text-sm sm:text-base min-h-[120px] resize-y friendly-hover"
               required
             ></textarea>
           </div>
 
           <button
             type="submit"
-            class="w-full px-4 py-3 sm:py-3 rounded-lg neu-button text-sm sm:text-base font-medium min-h-[48px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            class="w-full px-4 py-3 sm:py-3 rounded-lg text-blue-700 dark:text-blue-400 neu-button text-sm sm:text-base font-medium min-h-[48px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] friendly-hover"
           >
-            <i data-lucide="send" class="w-4 h-4 inline-block mr-2"></i>
+            <i
+              data-lucide="send"
+              class="w-4 h-4 text-blue-500 inline-block mr-2"
+            ></i>
             Send Message
           </button>
         </form>
@@ -229,4 +232,36 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Mobile-friendly improvements */
+  @media (max-width: 768px) {
+    .mobile-responsive-padding {
+      padding: 0.75rem;
+    }
+
+    .mobile-responsive-text {
+      font-size: 0.875rem;
+    }
+
+    .mobile-grid-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .mobile-responsive-padding {
+      padding: 0.5rem;
+    }
+
+    .mobile-responsive-text {
+      font-size: 0.75rem;
+    }
+
+    .mobile-center-content {
+      text-align: center;
+    }
+  }
+</style>
+
 {% endblock %}

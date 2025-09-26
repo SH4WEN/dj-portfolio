@@ -8,6 +8,8 @@ class Project(models.Model):
     description = models.TextField()
      # Changed to CloudinaryField
     image = CloudinaryField('image', folder='projects', blank=True, null=True )
+    # Add video field
+    video = CloudinaryField('video', folder='project_videos', blank=True, null=True, resource_type='video')
     url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
