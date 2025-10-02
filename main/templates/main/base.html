@@ -201,6 +201,114 @@
         display: none;
       }
 
+      /* Footer styles */
+      .sidebar footer {
+        background: var(--neu-bg-accent);
+        border-radius: 0 0 var(--neu-radius) 0;
+        margin-top: auto;
+        border-top: 1px solid var(--neu-shadow-light);
+      }
+
+      .sidebar footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--neu-shadow-dark),
+          transparent
+        );
+      }
+
+      .sidebar-collapsed footer {
+        padding: 1rem 0.5rem;
+      }
+
+      .sidebar-collapsed .user-info p {
+        font-size: 0.75rem;
+      }
+
+      /* Adjust footer layout for column structure */
+      .sidebar footer .flex-col {
+        width: 100%;
+      }
+
+      .sidebar-collapsed footer .flex-col {
+        align-items: center;
+      }
+
+      .sidebar-collapsed .user-info {
+        text-align: center;
+        margin-left: 0;
+      }
+
+      .sidebar-collapsed .user-info p {
+        font-size: 0.7rem;
+      }
+
+      /* Center buttons content */
+      .sidebar footer .neu-button {
+        min-width: 100px;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .sidebar footer .neu-button.space-x-2 {
+        gap: 0.5rem;
+      }
+
+      .sidebar-collapsed footer .neu-button {
+        min-width: auto;
+        padding: 0.5rem;
+        justify-content: center;
+      }
+
+      .sidebar-collapsed footer .neu-button span {
+        display: none;
+      }
+
+      .sidebar-collapsed footer .neu-button i {
+        margin: 0;
+      }
+
+      /* Button text colors */
+      .sidebar footer .neu-button .text-blue-600 {
+        color: #2563eb;
+      }
+
+      .sidebar footer .neu-button .text-red-600 {
+        color: #dc2626;
+      }
+
+      .sidebar footer .neu-button .text-green-600 {
+        color: #16a34a;
+      }
+
+      .dark .sidebar footer .neu-button .text-blue-400 {
+        color: #60a5fa;
+      }
+
+      .dark .sidebar footer .neu-button .text-red-400 {
+        color: #f87171;
+      }
+
+      .dark .sidebar footer .neu-button .text-green-400 {
+        color: #4ade80;
+      }
+
+      /* Stack buttons vertically */
+      .sidebar footer .flex-col.space-y-2 {
+        width: 100%;
+      }
+
+      .sidebar-collapsed footer .flex-col.space-y-2 {
+        align-items: center;
+      }
+
       /* Mobile responsive styles */
       @media (max-width: 768px) {
         .sidebar {
@@ -463,10 +571,10 @@
 
       <!-- User info section -->
       <footer class="p-4" style="box-shadow: var(--neu-inset-shadow)">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col space-y-4">
           <div class="flex items-center space-x-3">
             <div
-              class="w-10 h-10 rounded-full flex items-center justify-center font-semibold"
+              class="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg"
               style="
                 background: var(--neu-bg);
                 color: var(--neu-primary);
@@ -478,63 +586,68 @@
               {% else %}S{% endif %}
             </div>
             <div class="user-info">
-              <div class="neu-surface px-3 py-2 rounded-lg">
-                <p
-                  class="text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap"
-                >
-                  {% if user.is_authenticated %}
-                  {{user.get_full_name|default:user.username }} {% else %}
-                  SH4WEN{% endif %}
-                </p>
-                <p
-                  class="text-xs text-gray-500 dark:text-gray-400 flex items-center mt-1"
-                >
-                  {% if user.is_authenticated %}{{ user.email }}
-                  <!--  -->
-                  {% else %}{% endif %}
-                </p>
-              </div>
+              <p
+                class="text-lg font-extrabold text-gray-800 dark:text-gray-200 whitespace-nowrap"
+              >
+                {% if user.is_authenticated %}
+                {{user.get_full_name|default:user.username }} {% else %}
+                SH4WEN{% endif %}
+              </p>
+              <p
+                class="text-xs text-gray-500 dark:text-gray-400 flex items-center mt-1"
+              >
+                {% if user.is_authenticated %}{{ user.email }}
+                <!--  -->
+                {% else %}Portfolio Administrator{% endif %}
+              </p>
             </div>
           </div>
 
-          <div class="flex items-center space-x-2">
+          <div
+            class="flex flex-col space-y-2 px-3 border-t border-gray-200 dark:border-gray-700"
+          >
             <!-- Theme toggle button -->
-            <button
+            <a
               id="themeToggleFooter"
-              class="p-2 rounded-lg neu-button"
+              class="nav-link flex items-center mt-1 p-3 rounded-lg group relative neu-surface"
               title="Toggle Theme"
             >
-              <i
-                data-lucide="moon"
-                class="w-5 h-5 text-gray-700 dark:text-gray-200 hidden dark:block"
-              ></i>
-              <i
-                data-lucide="sun"
-                class="w-5 h-5 text-gray-700 dark:text-gray-200 block dark:hidden"
-              ></i>
-            </button>
+              <div class="nav-icon-container mr-3">
+                <i
+                  data-lucide="sun"
+                  class="w-5 h-5 text-blue-600 dark:text-blue-400"
+                ></i>
+              </div>
+              <span class="nav-text font-medium">Theme</span>
+            </a>
 
             {% if user.is_authenticated %}
             <a
               href="{% url 'logout' %}"
-              class="p-2 rounded-lg logout-icon neu-button"
+              class="nav-link flex items-center p-3 rounded-lg group relative neu-surface"
               title="Logout"
             >
-              <i
-                data-lucide="log-out"
-                class="w-5 h-5 text-gray-500 dark:text-gray-400"
-              ></i>
+              <div class="nav-icon-container mr-3">
+                <i
+                  data-lucide="log-out"
+                  class="w-5 h-5 text-red-600 dark:text-red-400"
+                ></i>
+              </div>
+              <span class="nav-text font-medium">Logout</span>
             </a>
             {% else %}
             <a
               href="/admin/"
-              class="p-2 rounded-lg settings-icon neu-button"
-              title="Admin Dashboard"
+              class="nav-link flex items-center p-3 rounded-lg group relative neu-surface"
+              title="Login"
             >
-              <i
-                data-lucide="settings"
-                class="w-5 h-5 text-gray-500 dark:text-gray-400"
-              ></i>
+              <div class="nav-icon-container mr-3">
+                <i
+                  data-lucide="settings"
+                  class="w-5 h-5 text-green-600 dark:text-green-400"
+                ></i>
+              </div>
+              <span class="nav-text font-medium">Login</span>
             </a>
             {% endif %}
           </div>
@@ -714,12 +827,28 @@
       }
 
       // Theme toggle functionality
-      function toggleTheme() {
+      function toggleTheme(event) {
+        // Prevent default link behavior for footer theme toggle
+        if (event) {
+          event.preventDefault();
+        }
+
         document.documentElement.classList.toggle("dark");
-        localStorage.setItem(
-          "theme",
-          document.documentElement.classList.contains("dark") ? "dark" : "light"
-        );
+        const isDark = document.documentElement.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+
+        // Update theme toggle button icon (show what will happen on next click)
+        updateThemeIcon(isDark);
+      }
+
+      // Function to update theme icon
+      function updateThemeIcon(isDark) {
+        const themeIcon = document.querySelector("#themeToggleFooter i");
+        if (themeIcon) {
+          themeIcon.setAttribute("data-lucide", isDark ? "sun" : "moon");
+          // Force update of Lucide icons
+          lucide.createIcons({ nameAttr: "data-lucide" });
+        }
       }
 
       // Check for saved theme preference
@@ -742,6 +871,16 @@
       if (themeToggleFooter) {
         themeToggleFooter.addEventListener("click", toggleTheme);
       }
+
+      // Initialize theme icon based on current theme
+      document.addEventListener("DOMContentLoaded", function () {
+        // Small delay to ensure dark mode class is properly applied
+        setTimeout(function () {
+          // Check if dark mode is active
+          const isDark = document.documentElement.classList.contains("dark");
+          updateThemeIcon(isDark);
+        }, 100);
+      });
     </script>
   </body>
 </html>
