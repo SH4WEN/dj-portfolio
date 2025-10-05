@@ -24,10 +24,9 @@ class ProfileAdmin(admin.ModelAdmin):
             'fields': ('name', 'title', 'bio')
         }),
         ('Files', {
-            'fields': ('image', 'cv')
+            'fields': ('image',)   
         }),
     )
-
 
 class EducationInline(admin.TabularInline):
     model = Education

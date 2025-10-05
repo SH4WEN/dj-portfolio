@@ -37,8 +37,8 @@ class Profile(models.Model):
     # Replace ImageField with CloudinaryField for images
     image = CloudinaryField('image', folder='profile_pics', blank=True, null=True)
     
-    # Replace FileField with CloudinaryField for files
-    cv = CloudinaryField('file', folder='cvs', resource_type='raw', blank=True, null=True)
+    # # Replace FileField with CloudinaryField for files
+    # cv = CloudinaryField('file', folder='cvs', resource_type='raw', blank=True, null=True)
     
     def __str__(self):
         return self.name
