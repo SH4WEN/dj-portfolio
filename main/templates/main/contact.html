@@ -9,6 +9,33 @@
       Contact Me
     </h1>
 
+    <!-- Formal note about contact unavailability -->
+    <div
+      class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg dark:bg-yellow-900/20 dark:border-yellow-600"
+    >
+      <div class="flex items-start">
+        <div class="flex-shrink-0">
+          <i
+            data-lucide="alert-circle"
+            class="w-5 h-5 text-yellow-400 dark:text-yellow-500"
+          ></i>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+            Contact Temporarily Unavailable
+          </h3>
+          <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+            <p>
+              Please note that direct contact through this form is currently
+              unavailable. For inquiries, you can reach out to me through my
+              social media accounts listed below.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of formal note -->
+
     <!-- Add messages display -->
     {% if messages %} {% for message in messages %}
     <div
@@ -139,12 +166,25 @@
                 class="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300"
               ></i>
             </a>
+            <!-- TikTok Icon using Font Awesome -->
+            <a
+              href="https://www.tiktok.com/@s4wen_?_r=1&_d=secCgYIASAHKAESPgo8%2BjI7h5ZYOAYr374%2BZ2RyNKTB0e1jT%2F41h6JR3iyENdR4ko5vSMaHo6PrKNzyoQR2vF5cHyTS7Nak0flcGgA%3D&_svg=1&checksum=13bec220afc58f7f6d81f10bc045f1d8a99c87d849e044a23e35db2155afbea3&item_author_type=1&sec_uid=MS4wLjABAAAA1s9qXjxp5vl2-n5FNKrAiN8lVYvie0zghdXUwhSshKWsSlhcMXaba1DpMWYptb3A&sec_user_id=MS4wLjABAAAA1s9qXjxp5vl2-n5FNKrAiN8lVYvie0zghdXUwhSshKWsSlhcMXaba1DpMWYptb3A&share_app_id=1180&share_author_id=7078276122349175809&share_link_id=1f995a03-4e0f-4b0b-b432-5de867479b0c&share_scene=1&sharer_language=en&social_share_type=5&source=h5_t&timestamp=1759852463&u_code=e0mja1dida1d3g&ug_btm=b8727%2Cb7360&ugbiz_name=ACCOUNT&user_id=7078276122349175809&utm_campaign=client_share&utm_medium=android&utm_source=copy"
+              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
+            >
+              <i
+                class="fab fa-tiktok w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300"
+              ></i>
+            </a>
           </div>
         </div>
       </div>
 
       <div>
-        <form method="post" class="space-y-4 sm:space-y-5" id="contact-form">
+        <form
+          method="post"
+          class="space-y-4 sm:space-y-5 disabled"
+          id="contact-form"
+        >
           {% csrf_token %} {% if form.non_field_errors %}
           <div
             class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
@@ -219,6 +259,7 @@
             type="submit"
             class="w-full px-4 py-3 sm:py-3 rounded-lg text-blue-700 dark:text-blue-400 neu-button text-sm sm:text-base font-medium min-h-[48px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] friendly-hover"
             id="submit-button"
+            disabled
           >
             <i
               data-lucide="send"
