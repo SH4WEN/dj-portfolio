@@ -10,7 +10,18 @@
       My Projects
     </h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <!-- Project description text -->
+    <div class="mb-6 sm:mb-8 animate-fade-in-up" style="animation-delay: 0.3s">
+      <p
+        class="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
+      >
+        Discover my collection of creative and functional projects—each built
+        with precision, passion, and purpose. Click any card to explore the
+        details.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       {% for project in projects %}
       <div
         class="relative rounded-lg overflow-hidden transition-all duration-300 ease-in-out h-full cursor-pointer hover:-translate-y-1 animate-fade-in-up neu-surface flex flex-col"
@@ -83,6 +94,81 @@
               View Project
               <i data-lucide="arrow-up-right" class="w-4 h-4 ml-2"></i>
             </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for project {{ project.id }} -->
+      <div
+        id="modal-{{ project.id }}"
+        class="fixed inset-0 z-50 hidden overflow-y-auto"
+      >
+        <div
+          id="modal-backdrop-{{ project.id }}"
+          class="fixed inset-0 bg-black transition-all duration-300 ease-in-out"
+          onclick="closeModal('modal-{{ project.id }}')"
+        ></div>
+        <div class="min-h-screen flex items-center justify-center p-4">
+          <div
+            id="modal-content-{{ project.id }}"
+            class="relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all duration-300 ease-in-out w-full max-w-3xl my-8 max-h-[90vh] flex flex-col"
+          >
+            <div class="overflow-y-auto flex-grow">
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                  <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+                    {{ project.title }}
+                  </h2>
+                  <button
+                    onclick="closeModal('modal-{{ project.id }}')"
+                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                  </button>
+                </div>
+
+                <div class="mb-6">
+                  {% if project.image %}
+                  <img
+                    src="{{ project.image.url }}"
+                    alt="{{ project.title }}"
+                    class="w-full h-64 object-cover rounded-lg"
+                  />
+                  {% endif %}
+                </div>
+
+                <div class="prose dark:prose-invert max-w-none mb-6">
+                  <p
+                    class="text-gray-700 dark:text-gray-300 whitespace-pre-line"
+                  >
+                    {{ project.description }}
+                  </p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">
+                    {{ project.created_at|date:"F d, Y" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {% if project.url %}
+            <div
+              class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600"
+            >
+              <div class="flex justify-end">
+                <a
+                  href="{{ project.url }}"
+                  class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
+                  target="_blank"
+                >
+                  View Project
+                  <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
+                </a>
+              </div>
+            </div>
             {% endif %}
           </div>
         </div>
@@ -210,6 +296,11 @@
         }
       });
     }
+  });
+
+  // Initialize lucide icons
+  document.addEventListener("DOMContentLoaded", function () {
+    lucide.createIcons();
   });
 </script>
 {% endblock %}

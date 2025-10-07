@@ -18,17 +18,7 @@
     >
       {{ message }}
     </div>
-    {% endfor %}
-    <script>
-      setTimeout(function () {
-        document
-          .querySelectorAll('[id^="django-message-"]')
-          .forEach(function (el) {
-            el.style.display = "none";
-          });
-      }, 3000);
-    </script>
-    {% endif %}
+    {% endfor %} {% endif %}
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
       <div>
@@ -154,72 +144,81 @@
       </div>
 
       <div>
-        <form method="post" class="space-y-4 sm:space-y-5">
-          {% csrf_token %}
+        <form method="post" class="space-y-4 sm:space-y-5" id="contact-form">
+          {% csrf_token %} {% if form.non_field_errors %}
+          <div
+            class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+          >
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
 
           <div>
             <label
-              for="name"
+              for="{{ form.name.id_for_label }}"
               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >Name</label
             >
-            <input
-              type="text"
-              id="name"
-              name="name"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg neu-surface dark:text-black neu-pressed text-sm sm:text-base min-h-[44px] friendly-hover"
-              required
-            />
+            {{ form.name }} {% if form.name.errors %}
+            <div class="mt-1 text-sm text-red-600 dark:text-red-500">
+              {% for error in form.name.errors %}
+              <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
           <div>
             <label
-              for="email"
+              for="{{ form.email.id_for_label }}"
               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >Email</label
             >
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 dark:text-black rounded-lg neu-surface neu-pressed text-sm sm:text-base min-h-[44px] friendly-hover"
-              required
-            />
+            {{ form.email }} {% if form.email.errors %}
+            <div class="mt-1 text-sm text-red-600 dark:text-red-500">
+              {% for error in form.email.errors %}
+              <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
           <div>
             <label
-              for="subject"
+              for="{{ form.subject.id_for_label }}"
               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >Subject</label
             >
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg dark:text-black neu-surface neu-pressed text-sm sm:text-base min-h-[44px] friendly-hover"
-              required
-            />
+            {{ form.subject }} {% if form.subject.errors %}
+            <div class="mt-1 text-sm text-red-600 dark:text-red-500">
+              {% for error in form.subject.errors %}
+              <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
           <div>
             <label
-              for="message"
+              for="{{ form.message.id_for_label }}"
               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >Message</label
             >
-            <textarea
-              id="message"
-              name="message"
-              rows="4"
-              class="w-full px-3 sm:px-4 py-3 sm:py-3 rounded-lg neu-surface neu-pressed text-sm sm:text-base min-h-[120px] resize-y friendly-hover"
-              required
-            ></textarea>
+            {{ form.message }} {% if form.message.errors %}
+            <div class="mt-1 text-sm text-red-600 dark:text-red-500">
+              {% for error in form.message.errors %}
+              <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
           <button
             type="submit"
             class="w-full px-4 py-3 sm:py-3 rounded-lg text-blue-700 dark:text-blue-400 neu-button text-sm sm:text-base font-medium min-h-[48px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] friendly-hover"
+            id="submit-button"
           >
             <i
               data-lucide="send"
@@ -228,6 +227,48 @@
             Send Message
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for form submission feedback -->
+<div
+  id="feedback-modal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 neu-surface friendly-shadow"
+  >
+    <div class="text-center">
+      <div
+        id="modal-icon"
+        class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 mb-4"
+      >
+        <i
+          data-lucide="check-circle"
+          class="h-6 w-6 text-green-600 dark:text-green-400"
+        ></i>
+      </div>
+      <h3
+        class="text-lg font-medium text-gray-900 dark:text-white mb-2"
+        id="modal-title"
+      >
+        Message Sent!
+      </h3>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500 dark:text-gray-300" id="modal-message">
+          Your message has been sent successfully. I'll get back to you soon.
+        </p>
+      </div>
+      <div class="mt-6">
+        <button
+          type="button"
+          class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 neu-button friendly-hover"
+          id="modal-close-button"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -262,6 +303,163 @@
       text-align: center;
     }
   }
+
+  /* Style the form fields */
+  #id_name,
+  #id_email,
+  #id_subject,
+  #id_message {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+    color: #000;
+    border: none;
+    box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff;
+    min-height: 44px;
+    transition: all 0.2s ease;
+  }
+
+  #id_message {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .dark #id_name,
+  .dark #id_email,
+  .dark #id_subject,
+  .dark #id_message {
+    background-color: #1f2937;
+    color: #fff;
+    box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151;
+  }
+
+  #id_name:focus,
+  #id_email:focus,
+  #id_subject:focus,
+  #id_message:focus {
+    outline: 2px solid #3b82f6;
+    box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff,
+      0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  .dark #id_name:focus,
+  .dark #id_email:focus,
+  .dark #id_subject:focus,
+  .dark #id_message:focus {
+    box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151,
+      0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  /* Modal styles */
+  .modal-content {
+    animation: modalFadeIn 0.3s ease-out;
+  }
+
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 </style>
+
+<script>
+  // Handle form submission and show modal
+  document.addEventListener("DOMContentLoaded", function () {
+    const contactForm = document.getElementById("contact-form");
+    const feedbackModal = document.getElementById("feedback-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMessage = document.getElementById("modal-message");
+    const modalIcon = document.getElementById("modal-icon");
+    const modalCloseButton = document.getElementById("modal-close-button");
+
+    // Initialize Lucide icons
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons();
+    }
+
+    // Check if there are Django messages and show modal if needed
+    const djangoMessages = document.querySelectorAll('[id^="django-message-"]');
+    djangoMessages.forEach(function (messageElement) {
+      const messageText = messageElement.textContent.trim();
+      if (messageText.includes("success")) {
+        showModal(
+          "Message Sent!",
+          "Your message has been sent successfully. I'll get back to you soon.",
+          "success"
+        );
+        // Clear form fields on successful submission
+        contactForm.reset();
+        // Hide the Django message since we're showing it in the modal
+        messageElement.style.display = "none";
+      } else if (messageText.includes("error")) {
+        showModal(
+          "Error Sending Message",
+          "There was an error sending your message. Please try again later.",
+          "error"
+        );
+        // Hide the Django message since we're showing it in the modal
+        messageElement.style.display = "none";
+      }
+    });
+
+    // Handle form submission
+    contactForm.addEventListener("submit", function (e) {
+      // Show submitting state
+      const submitButton = document.getElementById("submit-button");
+      const originalText = submitButton.innerHTML;
+      submitButton.innerHTML =
+        '<i data-lucide="loader" class="w-4 h-4 text-blue-500 inline-block mr-2 animate-spin"></i> Sending...';
+      submitButton.disabled = true;
+
+      // Initialize Lucide icons for the loader
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+      }
+    });
+
+    // Modal close functionality
+    modalCloseButton.addEventListener("click", function () {
+      feedbackModal.classList.add("hidden");
+    });
+
+    // Close modal when clicking outside
+    feedbackModal.addEventListener("click", function (e) {
+      if (e.target === feedbackModal) {
+        feedbackModal.classList.add("hidden");
+      }
+    });
+
+    // Function to show modal with appropriate message
+    function showModal(title, message, type) {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+
+      if (type === "success") {
+        modalIcon.innerHTML =
+          '<i data-lucide="check-circle" class="h-6 w-6 text-green-600 dark:text-green-400"></i>';
+        modalIcon.className =
+          "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 mb-4";
+      } else if (type === "error") {
+        modalIcon.innerHTML =
+          '<i data-lucide="x-circle" class="h-6 w-6 text-red-600 dark:text-red-400"></i>';
+        modalIcon.className =
+          "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 mb-4";
+      }
+
+      // Initialize Lucide icons
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+      }
+
+      feedbackModal.classList.remove("hidden");
+    }
+  });
+</script>
 
 {% endblock %}

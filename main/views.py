@@ -57,32 +57,38 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Get form data
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            subject = form.cleaned_data['subject']
-            message = form.cleaned_data['message']
-            
-            # Prepare email content
-            email_subject = f"New Contact Form Submission: {subject}"
-            email_message = f"""
-            Name: {name}
-            Email: {email}
-            Subject: {subject}
-            Message: {message}
-            """
-            
-            # Send email
-            send_mail(
-                email_subject,
-                email_message,
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.CONTACT_EMAIL],  # Your email where you want to receive messages
-                fail_silently=False,
-            )
-            
-            messages.success(request, 'Your message has been sent successfully!')
-            return redirect('contact')
+            try:
+                # Get form data
+                name = form.cleaned_data['name']
+                email = form.cleaned_data['email']
+                subject = form.cleaned_data['subject']
+                message = form.cleaned_data['message']
+                
+                # Prepare email content
+                email_subject = f"New Contact Form Submission: {subject}"
+                email_message = f"""
+                Name: {name}
+                Email: {email}
+                Subject: {subject}
+                Message: {message}
+                """
+                
+                # Send email
+                send_mail(
+                    email_subject,
+                    email_message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.CONTACT_EMAIL],  # Your email where you want to receive messages
+                    fail_silently=False,
+                )
+                
+                messages.success(request, 'Your message has been sent successfully!')
+                return redirect('contact')  # Redirect to clear the form
+            except Exception as e:
+                messages.error(request, 'There was an error sending your message. Please try again later.')
+                print(f"Email sending error: {e}")  # For debugging
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = ContactForm()
     

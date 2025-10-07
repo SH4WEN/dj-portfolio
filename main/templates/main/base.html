@@ -207,6 +207,7 @@
         border-radius: 0 0 var(--neu-radius) 0;
         margin-top: auto;
         border-top: 1px solid var(--neu-shadow-light);
+        width: 100%;
       }
 
       .sidebar footer::before {
@@ -237,13 +238,14 @@
         width: 100%;
       }
 
-      .sidebar-collapsed footer .flex-col {
+      .sidebar-collapsed .flex-col {
         align-items: center;
       }
 
       .sidebar-collapsed .user-info {
         text-align: center;
         margin-left: 0;
+        min-width: auto;
       }
 
       .sidebar-collapsed .user-info p {
@@ -253,8 +255,8 @@
       /* Center buttons content */
       .sidebar footer .neu-button {
         min-width: 100px;
-        justify-content: center;
-        text-align: center;
+        justify-content: flex-start;
+        text-align: left;
       }
 
       .sidebar footer .neu-button.space-x-2 {
@@ -333,6 +335,15 @@
         .mobile-menu-button {
           display: block !important;
         }
+
+        /* Footer adjustments for mobile */
+        .sidebar footer {
+          padding: 0.75rem;
+        }
+
+        .sidebar footer .flex-col.space-y-4 {
+          space-y: 0.5rem;
+        }
       }
 
       /* Small mobile devices */
@@ -342,6 +353,19 @@
         }
         .sidebar {
           width: 280px;
+        }
+
+        /* Footer adjustments for small screens */
+        .sidebar footer {
+          padding: 0.5rem;
+        }
+
+        .sidebar footer .user-info p.text-lg {
+          font-size: 0.875rem;
+        }
+
+        .sidebar footer .nav-link {
+          padding: 0.625rem;
         }
       }
 
@@ -572,55 +596,54 @@
       <!-- User info section -->
       <footer class="p-4" style="box-shadow: var(--neu-inset-shadow)">
         <div class="flex flex-col space-y-4">
-          <div class="flex items-center space-x-3">
-            <div
-              class="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg"
-              style="
-                background: var(--neu-bg);
-                color: var(--neu-primary);
-                box-shadow: var(--neu-outset-shadow);
-              "
-            >
-              {% if user.is_authenticated %}{{ user.username|first|upper }}
-              <!--  -->
-              {% else %}S{% endif %}
-            </div>
-            <div class="user-info">
-              <p
-                class="text-lg font-extrabold text-gray-800 dark:text-gray-200 whitespace-nowrap"
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg flex-shrink-0"
+                style="
+                  background: var(--neu-bg);
+                  color: var(--neu-primary);
+                  box-shadow: var(--neu-outset-shadow);
+                "
               >
-                {% if user.is_authenticated %}
-                {{user.get_full_name|default:user.username }} {% else %}
-                SH4WEN{% endif %}
-              </p>
-              <p
-                class="text-xs text-gray-500 dark:text-gray-400 flex items-center mt-1"
-              >
-                {% if user.is_authenticated %}{{ user.email }}
+                {% if user.is_authenticated %}{{ user.username|first|upper }}
                 <!--  -->
-                {% else %}Portfolio Administrator{% endif %}
-              </p>
+                {% else %}S{% endif %}
+              </div>
+              <div class="user-info min-w-0">
+                <p
+                  class="text-lg font-extrabold text-gray-800 dark:text-gray-200 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                >
+                  {% if user.is_authenticated %}
+                  {{user.get_full_name|default:user.username }} {% else %}
+                  SH4WEN{% endif %}
+                </p>
+                <p
+                  class="text-xs text-gray-500 dark:text-gray-400 flex items-center mt-1 overflow-hidden overflow-ellipsis"
+                >
+                  {% if user.is_authenticated %}{{ user.email }}
+                  <!--  -->
+                  {% else %}Portfolio Administrator{% endif %}
+                </p>
+              </div>
             </div>
+            <!-- Theme toggle button -->
+            <button
+              id="themeToggleFooter"
+              class="flex items-center justify-center w-10 h-10 rounded-full neu-pill"
+              title="Toggle Theme"
+            >
+              <i
+                id="themeIcon"
+                data-lucide="moon"
+                class="w-5 h-5 text-blue-600 dark:text-blue-400"
+              ></i>
+            </button>
           </div>
 
           <div
-            class="flex flex-col space-y-2 px-3 border-t border-gray-200 dark:border-gray-700"
+            class="flex flex-col space-y-2 px-3 border-t border-gray-200 dark:border-gray-700 pt-4"
           >
-            <!-- Theme toggle button -->
-            <a
-              id="themeToggleFooter"
-              class="nav-link flex items-center mt-1 p-3 rounded-lg group relative neu-surface"
-              title="Toggle Theme"
-            >
-              <div class="nav-icon-container mr-3">
-                <i
-                  data-lucide="sun"
-                  class="w-5 h-5 text-blue-600 dark:text-blue-400"
-                ></i>
-              </div>
-              <span class="nav-text font-medium">Theme</span>
-            </a>
-
             {% if user.is_authenticated %}
             <a
               href="{% url 'logout' %}"
@@ -643,7 +666,7 @@
             >
               <div class="nav-icon-container mr-3">
                 <i
-                  data-lucide="settings"
+                  data-lucide="log-in"
                   class="w-5 h-5 text-green-600 dark:text-green-400"
                 ></i>
               </div>
@@ -833,54 +856,54 @@
           event.preventDefault();
         }
 
+        // Toggle dark class on html element
         document.documentElement.classList.toggle("dark");
         const isDark = document.documentElement.classList.contains("dark");
+
+        // Save preference to localStorage
         localStorage.setItem("theme", isDark ? "dark" : "light");
 
-        // Update theme toggle button icon (show what will happen on next click)
+        // Update theme icon
         updateThemeIcon(isDark);
       }
 
       // Function to update theme icon
       function updateThemeIcon(isDark) {
-        const themeIcon = document.querySelector("#themeToggleFooter i");
+        const themeIcon = document.getElementById("themeIcon");
         if (themeIcon) {
+          // Show moon icon in light mode, sun icon in dark mode
           themeIcon.setAttribute("data-lucide", isDark ? "sun" : "moon");
           // Force update of Lucide icons
-          lucide.createIcons({ nameAttr: "data-lucide" });
+          lucide.createIcons();
         }
       }
 
       // Check for saved theme preference
-      if (
-        localStorage.getItem("theme") === "dark" ||
-        (!localStorage.getItem("theme") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
+      function initTheme() {
+        const savedTheme = localStorage.getItem("theme");
+        const systemPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+        // Apply theme based on saved preference or system preference
+        if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+          document.documentElement.classList.add("dark");
+          updateThemeIcon(true);
+        } else {
+          updateThemeIcon(false);
+        }
       }
 
-      // Add event listener to theme toggle nav item
-      const themeToggleNav = document.getElementById("themeToggleNav");
-      if (themeToggleNav) {
-        themeToggleNav.addEventListener("click", toggleTheme);
-      }
+      // Initialize theme on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        initTheme();
+      });
 
       // Add event listener to theme toggle footer button
       const themeToggleFooter = document.getElementById("themeToggleFooter");
       if (themeToggleFooter) {
         themeToggleFooter.addEventListener("click", toggleTheme);
       }
-
-      // Initialize theme icon based on current theme
-      document.addEventListener("DOMContentLoaded", function () {
-        // Small delay to ensure dark mode class is properly applied
-        setTimeout(function () {
-          // Check if dark mode is active
-          const isDark = document.documentElement.classList.contains("dark");
-          updateThemeIcon(isDark);
-        }, 100);
-      });
     </script>
   </body>
 </html>
