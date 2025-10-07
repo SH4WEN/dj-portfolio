@@ -32,37 +32,33 @@
       <!-- Profile Info - Takes remaining space -->
       <div class="w-full lg:w-3/5 lg:pl-6 xl:pl-8 text-center lg:text-left">
         <h1
-          class="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-3 animate-fade-in-up"
-          style="animation-delay: 0.1s"
+          class="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-3"
         >
           {{ profile.name }}
         </h1>
         <h2
-          class="text-base sm:text-lg md:text-xl lg:text-xl text-primary-600 dark:text-primary-400 mb-3 sm:mb-4 animate-fade-in-up"
-          style="animation-delay: 0.2s"
+          class="text-base sm:text-lg md:text-xl lg:text-xl text-primary-600 dark:text-primary-400 mb-3 sm:mb-4"
         >
           {{ profile.title }}
         </h2>
         <p
-          class="text-sm sm:text-base lg:text-base text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed animate-fade-in-up"
-          style="animation-delay: 0.3s"
+          class="text-sm sm:text-base lg:text-base text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed"
         >
           {{ profile.bio }}
         </p>
         <div
-          class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 animate-fade-in-up"
-          style="animation-delay: 0.4s"
+          class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4"
         >
-          {% if profile.cv %}
+          <!-- Static CV download link -->
           <a
-            href="{{ profile.cv.url }}"
+            href="{% url 'download_cv' %}"
             class="px-4 py-3 neu-button text-sm sm:text-base font-medium min-h-[44px] flex items-center justify-center"
             download
+            id="downloadCvBtn"
           >
             <i data-lucide="download" class="w-4 h-4 inline-block mr-2"></i>
             Download CV
           </a>
-          {% endif %}
           <a
             href="{% url 'contact' %}"
             class="px-4 py-3 neu-button text-sm sm:text-base font-medium min-h-[44px] flex items-center justify-center"
@@ -78,10 +74,7 @@
   <!-- Skills and Quick Links -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
     <!-- Skills Card -->
-    <div
-      class="rounded-xl p-4 sm:p-6 animate-fade-in-up neu-surface"
-      style="animation-delay: 0.5s"
-    >
+    <div class="rounded-xl p-4 sm:p-6 neu-surface">
       <h3
         class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center"
       >
@@ -118,10 +111,7 @@
     </div>
 
     <!-- Projects Card -->
-    <div
-      class="rounded-xl p-4 sm:p-6 animate-fade-in-up neu-surface"
-      style="animation-delay: 0.6s"
-    >
+    <div class="rounded-xl p-4 sm:p-6 neu-surface">
       <h3
         class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center"
       >
@@ -199,8 +189,78 @@
   </div>
   {% endwith %}
 </div>
+
+<!-- CV Download Confirmation Modal -->
+<div
+  id="cvDownloadModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl"
+  >
+    <div class="text-center">
+      <div
+        class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900 mb-4"
+      >
+        <i
+          data-lucide="check-circle"
+          class="h-10 w-10 text-green-600 dark:text-green-400"
+        ></i>
+      </div>
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+        Download Successful!
+      </h3>
+      <p class="text-gray-600 dark:text-gray-300 mb-6">
+        CV has been successfully downloaded. Check your downloads folder.
+      </p>
+      <button
+        id="closeModalBtn"
+        class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
+  // Handle CV download and show confirmation modal
+  document
+    .getElementById("downloadCvBtn")
+    .addEventListener("click", function (e) {
+      // Prevent the default loading overlay from appearing
+      e.stopImmediatePropagation();
+
+      // Show the modal after a short delay to allow download to start
+      setTimeout(function () {
+        document.getElementById("cvDownloadModal").classList.remove("hidden");
+      }, 500);
+    });
+
+  // Close modal when close button is clicked
+  document
+    .getElementById("closeModalBtn")
+    .addEventListener("click", function () {
+      document.getElementById("cvDownloadModal").classList.add("hidden");
+    });
+
   // Close modal when clicking outside of it
+  document
+    .getElementById("cvDownloadModal")
+    .addEventListener("click", function (event) {
+      if (event.target === this) {
+        this.classList.add("hidden");
+      }
+    });
+
+  // Close modal when pressing Escape key
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      document.getElementById("cvDownloadModal").classList.add("hidden");
+    }
+  });
+
+  // Close modal when clicking outside of it (existing code)
   window.addEventListener("click", function (event) {
     const modal = document.getElementById("projectModal");
     if (event.target === modal) {

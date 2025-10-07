@@ -8,4 +8,5 @@ urlpatterns = [
     path('certificates/', views.certificates, name='certificates'),
     path('logout/', views.custom_logout, name='logout'),
     path('contact/', views.contact, name='contact'),
+    path('download-cv/', views.download_cv, name='download_cv'),
 ]

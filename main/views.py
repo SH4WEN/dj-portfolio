@@ -1,19 +1,21 @@
 from django.shortcuts import render
-from .models import About, Profile, Project, Certificate, Skill
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render, redirect
 from .forms import ContactForm
 from django.contrib import messages
+from .models import About, Profile, Project, Certificate, Skill
+import os
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.http import FileResponse
+import urllib.parse
 
 
 # views.py
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-
-# def home(request):
-#     profile = Profile.objects.first()  # Get the first profile
-#     return render(request, 'main/home.html', {'profiles': Profile.objects.all()})
 
 def home(request):
     profile = Profile.objects.first()  # Get the first profile
@@ -35,11 +37,10 @@ def about(request):
         'about': about_content
     }
     return render(request, 'main/about.html', context)
+
 def projects(request):
     projects = Project.objects.all()
     return render(request, 'main/projects.html', {'projects': projects})
-
-
 
 def certificates(request):
     try:
@@ -94,7 +95,43 @@ def contact(request):
     
     return render(request, 'main/contact.html', {'form': form})
 
-
+def download_cv(request):
+    """
+    Serve static CV file for download
+    """
+    # Define the path to the CV file
+    cv_filename = "Sarmiento,Sherwin.pdf"
+    cv_path = os.path.join(settings.STATIC_ROOT, 'main', 'cv', cv_filename)
+    
+    # Alternative path in static directory
+    if not os.path.exists(cv_path):
+        cv_path = os.path.join(settings.STATICFILES_DIRS[0], 'main', 'cv', cv_filename)
+    
+    # Check if file exists
+    if not os.path.exists(cv_path):
+        # Try without the comma in filename (URL encoded)
+        cv_filename_alt = "SarmientoSherwin.pdf"
+        cv_path_alt = os.path.join(settings.STATIC_ROOT, 'main', 'cv', cv_filename_alt)
+        if not os.path.exists(cv_path_alt):
+            cv_path_alt = os.path.join(settings.STATICFILES_DIRS[0], 'main', 'cv', cv_filename_alt)
+        if os.path.exists(cv_path_alt):
+            cv_path = cv_path_alt
+            cv_filename = cv_filename_alt
+    
+    # If still not found, raise 404
+    if not os.path.exists(cv_path):
+        raise Http404("CV not found")
+    
+    try:
+        # Serve the file for download
+        response = FileResponse(
+            open(cv_path, 'rb'),
+            content_type='application/pdf'
+        )
+        response['Content-Disposition'] = f'attachment; filename="{cv_filename}"'
+        return response
+    except Exception as e:
+        raise Http404(f"CV could not be served: {str(e)}")
 
 def custom_logout(request):
     logout(request)

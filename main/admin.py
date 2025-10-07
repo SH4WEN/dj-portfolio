@@ -24,7 +24,7 @@ class ProfileAdmin(admin.ModelAdmin):
             'fields': ('name', 'title', 'bio')
         }),
         ('Files', {
-            'fields': ('image',)   
+            'fields': ('image', 'cv')   
         }),
     )
 

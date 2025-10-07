@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils.text import slugify
-from django.db import models
 from cloudinary.models import CloudinaryField
 
 class Project(models.Model):
@@ -14,7 +12,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 class Certificate(models.Model):
     title = models.CharField(max_length=200)
@@ -25,8 +23,7 @@ class Certificate(models.Model):
     image = CloudinaryField('image', folder='certificates', blank=True, null=True)
     
     def __str__(self):
-        return self.title
-    
+        return str(self.title)
 
 
 class Profile(models.Model):
@@ -37,11 +34,9 @@ class Profile(models.Model):
     # Replace ImageField with CloudinaryField for images
     image = CloudinaryField('image', folder='profile_pics', blank=True, null=True)
     
-    # # Replace FileField with CloudinaryField for files
-    # cv = CloudinaryField('file', folder='cvs', resource_type='raw', blank=True, null=True)
-    
+    # Removed CV field - will serve statically
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 class About(models.Model):
     """
@@ -102,9 +97,13 @@ class WorkExperience(models.Model):
         verbose_name_plural = "Work Experiences"
 
     def __str__(self):
-        status = "Present" if self.currently_working else self.end_date.strftime("%Y") if self.end_date else ""
-        return f"{self.position} at {self.company} ({self.start_date.year} - {status})"
-    
+        if self.currently_working:
+            status = "Present"
+        elif self.end_date:
+            status = str(self.end_date.year) if hasattr(self.end_date, 'year') else ""
+        else:
+            status = ""
+        return f"{self.position} at {self.company} ({self.start_date.year if hasattr(self.start_date, 'year') else ''} - {status})"
 
 class Skill(models.Model):
     name = models.CharField(max_length=50)
