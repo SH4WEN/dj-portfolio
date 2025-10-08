@@ -13,12 +13,19 @@ services:
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "python -m gunicorn portfolio_site.asgi:application -k uvicorn.workers.UvicornWorker"
-    # envVars:
-    #   - key: DATABASE_URL
-    #   fromDatabase:
-    #   name: mysitedb
-    #   property: connectionString
-    #   - key: SECRET_KEY
-    #   generateValue: true
-    #   - key: WEB_CONCURRENCY
-    #   value: 4
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: EMAIL_HOST_USER
+        value: sarmientosherwin11@gmail.com
+      - key: DEFAULT_FROM_EMAIL
+        value: sarmientosherwin11@gmail.com
+# envVars:
+#   - key: DATABASE_URL
+#   fromDatabase:
+#   name: mysitedb
+#   property: connectionString
+#   - key: SECRET_KEY
+#   generateValue: true
+#   - key: WEB_CONCURRENCY
+#   value: 4
