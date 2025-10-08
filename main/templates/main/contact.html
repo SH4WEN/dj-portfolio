@@ -10,7 +10,7 @@
     </h1>
 
     <!-- Formal note about contact unavailability -->
-    <!-- <div
+    <div
       class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg dark:bg-yellow-900/20 dark:border-yellow-600"
     >
       <div class="flex items-start">
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- End of formal note -->
 
     <!-- Add messages display -->
@@ -180,11 +180,7 @@
       </div>
 
       <div>
-        <form
-          method="post"
-          class="space-y-4 sm:space-y-5 disabled"
-          id="contact-form"
-        >
+        <form method="post" class="space-y-4 sm:space-y-5" id="contact-form">
           {% csrf_token %} {% if form.non_field_errors %}
           <div
             class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
@@ -353,16 +349,26 @@
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     background-color: #f9fafb;
-    color: #000;
+    color: #9ca3af; /* Gray text to indicate disabled state */
     border: none;
     box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff;
     min-height: 44px;
     transition: all 0.2s ease;
+    cursor: not-allowed; /* Show cursor as not-allowed */
+  }
+
+  /* Make placeholder text more visible */
+  #id_name::placeholder,
+  #id_email::placeholder,
+  #id_subject::placeholder,
+  #id_message::placeholder {
+    color: #9ca3af;
+    opacity: 1; /* Firefox requires this */
   }
 
   #id_message {
     min-height: 120px;
-    resize: vertical;
+    resize: none; /* Disable resizing for disabled field */
   }
 
   .dark #id_name,
@@ -370,7 +376,7 @@
   .dark #id_subject,
   .dark #id_message {
     background-color: #1f2937;
-    color: #fff;
+    color: #9ca3af;
     box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151;
   }
 
@@ -378,17 +384,21 @@
   #id_email:focus,
   #id_subject:focus,
   #id_message:focus {
-    outline: 2px solid #3b82f6;
-    box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff,
-      0 0 0 3px rgba(59, 130, 246, 0.2);
+    outline: none;
+    box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff;
   }
 
   .dark #id_name:focus,
   .dark #id_email:focus,
   .dark #id_subject:focus,
   .dark #id_message:focus {
-    box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151,
-      0 0 0 3px rgba(59, 130, 246, 0.2);
+    box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151;
+  }
+
+  /* Style the submit button as disabled */
+  #submit-button {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   /* Modal styles */
@@ -423,44 +433,24 @@
       lucide.createIcons();
     }
 
-    // Check if there are Django messages and show modal if needed
-    const djangoMessages = document.querySelectorAll('[id^="django-message-"]');
-    djangoMessages.forEach(function (messageElement) {
-      const messageText = messageElement.textContent.trim();
-      if (messageText.includes("success")) {
-        showModal(
-          "Message Sent!",
-          "Your message has been sent successfully. I'll get back to you soon.",
-          "success"
-        );
-        // Clear form fields on successful submission
-        contactForm.reset();
-        // Hide the Django message since we're showing it in the modal
-        messageElement.style.display = "none";
-      } else if (messageText.includes("error")) {
-        showModal(
-          "Error Sending Message",
-          "There was an error sending your message. Please try again later.",
-          "error"
-        );
-        // Hide the Django message since we're showing it in the modal
-        messageElement.style.display = "none";
-      }
-    });
+    // Show modal immediately with unavailable message
+    showModal(
+      "Contact Form Unavailable",
+      "The contact form is temporarily unavailable. Sorry for the inconvenience! You can still reach me through my social media platforms",
+      "info"
+    );
 
     // Handle form submission
     contactForm.addEventListener("submit", function (e) {
-      // Show submitting state
-      const submitButton = document.getElementById("submit-button");
-      const originalText = submitButton.innerHTML;
-      submitButton.innerHTML =
-        '<i data-lucide="loader" class="w-4 h-4 text-blue-500 inline-block mr-2 animate-spin"></i> Sending...';
-      submitButton.disabled = true;
+      // Prevent form submission since it's unavailable
+      e.preventDefault();
 
-      // Initialize Lucide icons for the loader
-      if (typeof lucide !== "undefined") {
-        lucide.createIcons();
-      }
+      // Show modal with unavailable message
+      showModal(
+        "Contact Form Unavailable",
+        "The contact form is temporarily unavailable. Sorry for the inconvenience! You can still reach me through my social media platforms",
+        "info"
+      );
     });
 
     // Modal close functionality
@@ -490,6 +480,12 @@
           '<i data-lucide="x-circle" class="h-6 w-6 text-red-600 dark:text-red-400"></i>';
         modalIcon.className =
           "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 mb-4";
+      } else {
+        // Info type
+        modalIcon.innerHTML =
+          '<i data-lucide="info" class="h-6 w-6 text-blue-600 dark:text-blue-400"></i>';
+        modalIcon.className =
+          "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 mb-4";
       }
 
       // Initialize Lucide icons
