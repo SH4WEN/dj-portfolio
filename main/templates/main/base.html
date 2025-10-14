@@ -349,6 +349,16 @@
         .sidebar footer .flex-col.space-y-4 {
           space-y: 0.5rem;
         }
+
+        /* Mobile collapsed sidebar footer adjustments */
+        .sidebar-collapsed footer .sidebar-footer {
+          padding: 0.5rem 0.25rem;
+        }
+
+        .sidebar-collapsed footer .sidebar-theme-toggle,
+        .sidebar-collapsed footer .sidebar-user-info {
+          padding: 0.5rem;
+        }
       }
 
       /* Small mobile devices */
@@ -371,6 +381,11 @@
 
         .sidebar footer .nav-link {
           padding: 0.625rem;
+        }
+
+        /* Small screen collapsed sidebar footer adjustments */
+        .sidebar-collapsed footer .sidebar-footer {
+          padding: 0.25rem;
         }
       }
 
@@ -475,6 +490,18 @@
       /* Hidden class for immediate hiding */
       .hidden-loading {
         display: none !important;
+      }
+
+      /* Additional responsive styles for sidebar footer */
+      @media (max-width: 768px) {
+        .sidebar-collapsed .sidebar-footer {
+          padding: 0.5rem;
+        }
+
+        .sidebar-collapsed .sidebar-theme-toggle,
+        .sidebar-collapsed .sidebar-user-info {
+          padding: 0.5rem;
+        }
       }
     </style>
   </head>
@@ -600,86 +627,256 @@
 
       <!-- User info section -->
       <footer class="p-4" style="box-shadow: var(--neu-inset-shadow)">
-        <div class="flex flex-col space-y-4">
-          <div class="flex items-center justify-between">
+        <!-- Isolated Sidebar Footer Component with Neumorphic Styling -->
+        <div
+          class="sidebar-footer p-4 bg-gray-100 dark:bg-gray-900 space-y-4 shadow-[inset_0_8px_16px_#c5c5c5] dark:shadow-[inset_0_6px_12px_rgba(0,0,0,0.3)] border-t border-gray-200/50 dark:border-gray-700/50"
+        >
+          <!-- Dark Mode Toggle -->
+          <div
+            class="sidebar-theme-toggle flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-900 rounded-xl shadow-[inset_6px_6px_12px_#c5c5c5,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] transition-all duration-300 hover:shadow-[inset_8px_8px_16px_#c5c5c5,inset_-8px_-8px_16px_#ffffff] dark:hover:shadow-[inset_6px_6px_12px_rgba(0,0,0,0.3),inset_-6px_-6px_12px_rgba(255,255,255,0.05)]"
+          >
             <div class="flex items-center space-x-3">
               <div
-                class="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg flex-shrink-0"
-                style="
-                  background: var(--neu-bg);
-                  color: var(--neu-primary);
-                  box-shadow: var(--neu-outset-shadow);
-                "
+                class="w-5 h-5 bg-gray-100 dark:bg-gray-900 rounded-xl flex items-center justify-center shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] dark:shadow-[3px_3px_6px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.05)] transition-all duration-300"
               >
-                {% if user.is_authenticated %}{{ user.username|first|upper }}
-                <!--  -->
-                {% else %}S{% endif %}
+                <i
+                  data-lucide="palette"
+                  class="w-4 h-4 text-indigo-600 dark:text-indigo-400 transition-all duration-300"
+                ></i>
               </div>
-              <div class="user-info min-w-0">
-                <p
-                  class="text-lg font-extrabold text-gray-800 dark:text-gray-200 whitespace-nowrap overflow-hidden overflow-ellipsis"
+              <div class="theme-text">
+                <span
+                  class="text-xs font-semibold text-gray-800 dark:text-gray-200 transition-all duration-300"
+                  >Theme</span
                 >
-                  {% if user.is_authenticated %}
-                  {{user.get_full_name|default:user.username }} {% else %}
-                  SH4WEN{% endif %}
-                </p>
                 <p
-                  class="text-xs text-gray-500 dark:text-gray-400 flex items-center mt-1 overflow-hidden overflow-ellipsis"
+                  class="text-xs text-gray-500 dark:text-gray-400 transition-all duration-300 hidden sm:block"
                 >
-                  {% if user.is_authenticated %}{{ user.email }}
-                  <!--  -->
-                  {% else %}Portfolio Administrator{% endif %}
+                  Light/Dark
                 </p>
               </div>
             </div>
-            <!-- Theme toggle button -->
             <button
-              id="themeToggleFooter"
-              class="flex items-center justify-center w-10 h-10 rounded-full neu-pill"
-              title="Toggle Theme"
+              id="theme-toggle"
+              class="dark-mode-toggle w-10 h-5 flex items-center rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300"
+              aria-label="Toggle theme"
             >
-              <i
-                id="themeIcon"
-                data-lucide="moon"
-                class="w-5 h-5 text-blue-600 dark:text-blue-400"
-              ></i>
+              <div
+                class="w-3 h-3 rounded-full bg-white dark:bg-gray-200 shadow transform transition-transform duration-300 m-0.5"
+              ></div>
             </button>
           </div>
 
+          <!-- Enhanced User Info -->
           <div
-            class="flex flex-col space-y-2 px-3 border-t border-gray-200 dark:border-gray-700 pt-4"
+            class="sidebar-user-info p-3 bg-gray-100 dark:bg-gray-900 rounded-xl shadow-[inset_6px_6px_12px_#c5c5c5,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] transition-all duration-300 hover:shadow-[inset_8px_8px_16px_#c5c5c5,inset_-8px_-8px_16px_#ffffff] dark:hover:shadow-[inset_6px_6px_12px_rgba(0,0,0,0.3),inset_-6px_-6px_12px_rgba(255,255,255,0.05)]"
           >
             {% if user.is_authenticated %}
-            <a
-              href="{% url 'logout' %}"
-              class="nav-link flex items-center p-3 rounded-lg group relative neu-surface"
-              title="Logout"
-            >
-              <div class="nav-icon-container mr-3">
+            <div class="flex items-center space-x-3 mb-3 user-content">
+              <div
+                class="w-10 h-10 bg-gray-100 dark:bg-gray-900 rounded-xl flex items-center justify-center shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),-4px_-4px_8px_rgba(255,255,255,0.05)] transition-all duration-300 user-icon"
+              >
                 <i
-                  data-lucide="log-out"
-                  class="w-5 h-5 text-red-600 dark:text-red-400"
+                  data-lucide="user"
+                  class="w-5 h-5 text-emerald-500 transition-all duration-300"
                 ></i>
               </div>
-              <span class="nav-text font-medium">Logout</span>
-            </a>
+              <div class="flex-1 min-w-0 user-text">
+                <p
+                  class="text-sm font-semibold text-gray-800 dark:text-gray-200 transition-all duration-300 truncate username"
+                >
+                  {{ user.username }}
+                </p>
+                <p
+                  class="text-xs text-emerald-600 dark:text-emerald-400 transition-all duration-300 auth-status"
+                >
+                  ✓ Authenticated
+                </p>
+              </div>
+            </div>
+            <form action="{% url 'logout' %}" method="post" class="w-full">
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="w-full flex items-center justify-center space-x-2 px-3 py-2 text-sm text-red-600 dark:text-red-400 bg-gray-100 dark:bg-gray-900 rounded-lg transition-all duration-300 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),-4px_-4px_8px_rgba(255,255,255,0.05)] hover:shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] dark:hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.3),inset_-3px_-3px_6px_rgba(255,255,255,0.05)] font-medium logout-btn"
+              >
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                <span class="logout-text">Sign Out</span>
+              </button>
+            </form>
             {% else %}
+            <div class="flex items-center space-x-3 mb-3 user-content">
+              <div
+                class="w-10 h-10 bg-gray-100 dark:bg-gray-900 rounded-xl flex items-center justify-center shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),-4px_-4px_8px_rgba(255,255,255,0.05)] transition-all duration-300 user-icon"
+              >
+                <i
+                  data-lucide="user"
+                  class="w-5 h-5 text-green-500 transition-all duration-300"
+                ></i>
+              </div>
+              <div class="flex-1 min-w-0 user-text">
+                <p
+                  class="text-sm font-semibold text-gray-800 dark:text-gray-200 transition-all duration-300 truncate username"
+                >
+                  SH4WEN
+                </p>
+                <p
+                  class="text-xs text-amber-600 dark:text-green-400 transition-all duration-300 auth-status"
+                >
+                  Portfolio Site
+                </p>
+              </div>
+            </div>
             <a
               href="/admin/"
-              class="nav-link flex items-center p-3 rounded-lg group relative neu-surface"
-              title="Login"
+              class="w-full flex items-center justify-center space-x-2 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-900 rounded-lg transition-all duration-300 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),-4px_-4px_8px_rgba(255,255,255,0.05)] hover:shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] dark:hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.3),inset_-3px_-3px_6px_rgba(255,255,255,0.05)] font-medium login-btn"
             >
-              <div class="nav-icon-container mr-3">
-                <i
-                  data-lucide="log-in"
-                  class="w-5 h-5 text-green-600 dark:text-green-400"
-                ></i>
-              </div>
-              <span class="nav-text font-medium">Login</span>
+              <i data-lucide="log-in" class="w-4 h-4"></i>
+              <span class="login-text">Sign In</span>
             </a>
             {% endif %}
           </div>
         </div>
+
+        <style>
+          /* Isolated styles for sidebar footer to prevent conflicts */
+          .sidebar-footer {
+            /* Ensure footer styles don't leak to other pages */
+            isolation: isolate;
+            width: 100%;
+          }
+
+          .sidebar-footer * {
+            /* Remove all transitions */
+            transition: none !important;
+          }
+
+          /* Ensure neumorphic styles only apply within sidebar footer */
+          .sidebar-footer .sidebar-theme-toggle,
+          .sidebar-footer .sidebar-user-info {
+            /* Container isolation */
+            contain: layout style paint;
+          }
+
+          /* Responsive adjustments for sidebar footer */
+          @media (max-width: 768px) {
+            .sidebar-footer {
+              padding: 0.75rem;
+            }
+
+            .sidebar-theme-toggle,
+            .sidebar-user-info {
+              padding: 0.75rem;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .sidebar-footer {
+              padding: 0.5rem;
+            }
+
+            .sidebar-theme-toggle,
+            .sidebar-user-info {
+              padding: 0.5rem;
+            }
+
+            .sidebar-theme-toggle .text-xs,
+            .sidebar-user-info .text-sm {
+              font-size: 0.75rem;
+            }
+          }
+
+          /* Collapsed sidebar adjustments */
+          .sidebar-collapsed .sidebar-footer {
+            padding: 0.75rem 0.25rem;
+          }
+
+          .sidebar-collapsed .sidebar-theme-toggle,
+          .sidebar-collapsed .sidebar-user-info {
+            padding: 0.5rem;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+
+          .sidebar-collapsed .theme-text,
+          .sidebar-collapsed .user-text,
+          .sidebar-collapsed .logout-text,
+          .sidebar-collapsed .login-text,
+          .sidebar-collapsed .sidebar-theme-toggle p {
+            display: none;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+          }
+
+          .sidebar-collapsed .sidebar-theme-toggle .flex,
+          .sidebar-collapsed .user-content {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+          }
+
+          .sidebar-collapsed .sidebar-theme-toggle .w-8,
+          .sidebar-collapsed .user-icon {
+            margin: 0 auto;
+          }
+
+          .sidebar-collapsed .logout-btn,
+          .sidebar-collapsed .login-btn {
+            padding: 0.5rem;
+            justify-content: center;
+          }
+
+          .sidebar-collapsed .logout-btn span,
+          .sidebar-collapsed .login-btn span {
+            display: none;
+          }
+
+          .sidebar-collapsed .logout-btn i,
+          .sidebar-collapsed .login-btn i {
+            margin: 0;
+          }
+
+          /* Ensure proper spacing when collapsed */
+          .sidebar-collapsed .space-y-4 {
+            gap: 0.75rem;
+          }
+
+          .sidebar-collapsed .mb-3 {
+            margin-bottom: 0.5rem;
+          }
+
+          /* Adjustments for extremely narrow collapsed state */
+          .sidebar-collapsed .sidebar-theme-toggle,
+          .sidebar-collapsed .sidebar-user-info {
+            width: 100%;
+            max-width: 60px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          /* Center the theme toggle button when collapsed */
+          .sidebar-collapsed .dark-mode-toggle {
+            margin: 0 auto;
+          }
+
+          /* Hide text elements but keep them accessible to screen readers */
+          .sidebar-collapsed .theme-text,
+          .sidebar-collapsed .user-text,
+          .sidebar-collapsed .logout-text,
+          .sidebar-collapsed .login-text {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+          }
+        </style>
       </footer>
     </aside>
 
@@ -868,7 +1065,26 @@
         // Save preference to localStorage
         localStorage.setItem("theme", isDark ? "dark" : "light");
 
-        // Update theme icon
+        // Update theme toggle button appearance
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+          const toggleHandle = themeToggle.querySelector("div");
+          if (toggleHandle) {
+            if (isDark) {
+              // Move handle to the right for dark mode
+              toggleHandle.style.transform = "translateX(20px)";
+              themeToggle.classList.remove("bg-gray-300");
+              themeToggle.classList.add("bg-gray-600");
+            } else {
+              // Move handle to the left for light mode
+              toggleHandle.style.transform = "translateX(0)";
+              themeToggle.classList.remove("bg-gray-600");
+              themeToggle.classList.add("bg-gray-300");
+            }
+          }
+        }
+
+        // Update theme icon (for the old toggle if it exists)
         updateThemeIcon(isDark);
       }
 
@@ -893,9 +1109,27 @@
         // Apply theme based on saved preference or system preference
         if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
           document.documentElement.classList.add("dark");
-          updateThemeIcon(true);
+          // Update toggle button for dark mode
+          const themeToggle = document.getElementById("theme-toggle");
+          if (themeToggle) {
+            const toggleHandle = themeToggle.querySelector("div");
+            if (toggleHandle) {
+              toggleHandle.style.transform = "translateX(20px)";
+              themeToggle.classList.remove("bg-gray-300");
+              themeToggle.classList.add("bg-gray-600");
+            }
+          }
         } else {
-          updateThemeIcon(false);
+          // Update toggle button for light mode
+          const themeToggle = document.getElementById("theme-toggle");
+          if (themeToggle) {
+            const toggleHandle = themeToggle.querySelector("div");
+            if (toggleHandle) {
+              toggleHandle.style.transform = "translateX(0)";
+              themeToggle.classList.remove("bg-gray-600");
+              themeToggle.classList.add("bg-gray-300");
+            }
+          }
         }
       }
 
@@ -908,6 +1142,12 @@
       const themeToggleFooter = document.getElementById("themeToggleFooter");
       if (themeToggleFooter) {
         themeToggleFooter.addEventListener("click", toggleTheme);
+      }
+
+      // Add event listener to new theme toggle button
+      const newThemeToggle = document.getElementById("theme-toggle");
+      if (newThemeToggle) {
+        newThemeToggle.addEventListener("click", toggleTheme);
       }
     </script>
   </body>
