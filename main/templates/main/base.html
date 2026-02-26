@@ -144,12 +144,19 @@
         margin-left: 80px;
       }
       .sidebar-collapsed .nav-text {
+        display: none;
         opacity: 0;
         width: 0;
         margin-left: -10px;
       }
       .sidebar-collapsed .sidebar-header h1 {
         display: none;
+      }
+
+      /* Ensure sidebar remains vertical when collapsed */
+      .sidebar-collapsed {
+        flex-direction: column;
+        width: 80px;
       }
       /* Icon container styles */
       .nav-icon-container {
@@ -178,13 +185,9 @@
         display: none;
       }
       .sidebar-collapsed .nav-tooltip {
-        display: block;
+        display: none;
         visibility: hidden;
         opacity: 0;
-      }
-      .sidebar-collapsed .nav-link:hover .nav-tooltip {
-        visibility: visible;
-        opacity: 1;
       }
       /* Hamburger icon animation */
       .hamburger {
@@ -196,14 +199,22 @@
       .user-info {
       }
       .sidebar-collapsed .user-info {
+        display: none;
         opacity: 0;
         width: 0;
         margin-left: -10px;
       }
-      /* Hide settings/logout icon when collapsed */
+      /* Hide all text elements when collapsed */
       .sidebar-collapsed .settings-icon,
-      .sidebar-collapsed .logout-icon {
-        display: none;
+      .sidebar-collapsed .logout-icon,
+      .sidebar-collapsed .login-icon,
+      .sidebar-collapsed span,
+      .sidebar-collapsed p,
+      .sidebar-collapsed .theme-text,
+      .sidebar-collapsed .user-text,
+      .sidebar-collapsed .logout-text,
+      .sidebar-collapsed .login-text {
+        display: none !important;
       }
 
       /* Footer styles */
@@ -274,12 +285,18 @@
         justify-content: center;
       }
 
-      .sidebar-collapsed footer .neu-button span {
-        display: none;
+      .sidebar-collapsed footer .neu-button span,
+      .sidebar-collapsed footer .neu-button p,
+      .sidebar-collapsed footer .text-xs,
+      .sidebar-collapsed footer .text-sm {
+        display: none !important;
       }
 
       .sidebar-collapsed footer .neu-button i {
         margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       /* Button text colors */
@@ -320,8 +337,9 @@
       @media (max-width: 768px) {
         .sidebar {
           transform: translateX(-100%);
-          width: 260px;
+          width: 280px;
           z-index: 50;
+          transition: transform 0.3s ease-in-out;
         }
         .sidebar.mobile-expanded {
           transform: translateX(0);
@@ -329,6 +347,7 @@
         .sidebar-collapsed {
           transform: translateX(-100%);
           width: 80px;
+          flex-direction: column;
         }
         .sidebar-collapsed.mobile-expanded {
           transform: translateX(0);
@@ -367,7 +386,26 @@
           padding: 0.75rem;
         }
         .sidebar {
-          width: 280px;
+          width: 260px;
+        }
+
+        /* Adjust sidebar header for small screens */
+        .sidebar-header {
+          padding: 1rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.125rem;
+        }
+
+        /* Adjust nav links for better touch targets */
+        .nav-link {
+          padding: 0.875rem 1rem;
+        }
+
+        /* Adjust footer for small screens */
+        .sidebar footer {
+          padding: 0.75rem;
         }
 
         /* Footer adjustments for small screens */
@@ -392,12 +430,30 @@
       /* Touch-friendly enhancements */
       @media (hover: none) and (pointer: coarse) {
         .nav-link {
-          padding: 0.875rem;
+          padding: 1rem;
           min-height: 48px;
         }
         .neu-button {
-          min-height: 44px;
-          padding: 0.625rem 1rem;
+          min-height: 48px;
+          padding: 0.75rem 1rem;
+        }
+
+        /* Larger touch targets for mobile */
+        .sidebar-toggle,
+        .mobile-menu-button {
+          min-height: 48px;
+          min-width: 48px;
+        }
+
+        /* Adjust icon sizes for better visibility */
+        .nav-icon-container {
+          width: 40px;
+          height: 40px;
+        }
+
+        .nav-icon-container i {
+          width: 20px;
+          height: 20px;
         }
       }
 
@@ -435,9 +491,132 @@
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 40;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
       }
       .sidebar-overlay.active {
         display: block;
+        opacity: 1;
+      }
+
+      /* Sidebar animation classes */
+      .sidebar {
+        transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+      }
+
+      .sidebar-opening {
+        animation: sidebarSlideIn 0.3s ease-out forwards;
+      }
+
+      /* Flip animation for profile images */
+      .flip-container {
+        perspective: 1000px;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      .flipper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .flip-container.flipped .flipper {
+        transform: rotateY(180deg);
+      }
+
+      .front,
+      .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 0.5rem;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+      }
+
+      /* Default state - front visible, back hidden */
+      .front {
+        display: block;
+      }
+
+      .back {
+        display: none;
+      }
+
+      /* When flipped - back visible, front hidden */
+      .flip-container.flipped .front {
+        display: none;
+      }
+
+      .flip-container.flipped .back {
+        display: block;
+      }
+
+      /* Dark mode specific image display - sleep image always shows in dark mode */
+      .dark .flip-container:not(.flipped) .front {
+        display: none;
+      }
+
+      .dark .flip-container:not(.flipped) .back {
+        display: block;
+      }
+
+      /* When in dark mode and flipped, show front (normal image) */
+      .dark .flip-container.flipped .front {
+        display: block;
+      }
+
+      .dark .flip-container.flipped .back {
+        display: none;
+      }
+
+      .sidebar-closing {
+        animation: sidebarSlideOut 0.2s ease-in forwards;
+      }
+
+      @keyframes sidebarSlideIn {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes sidebarSlideOut {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-100%);
+        }
+      }
+
+      /* Collapsed sidebar transition */
+      .sidebar-collapsed {
+        transition: all 0.3s ease-in-out;
+      }
+
+      /* Theme toggle specific collapsed styles */
+      .sidebar-collapsed .sidebar-theme-toggle {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .sidebar-collapsed .dark-mode-toggle {
+        margin: 0 auto;
+        padding: 0.5rem;
+      }
+
+      .sidebar-collapsed .dark-mode-toggle .w-5 {
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
       }
 
       /* Loading effect styles */
@@ -492,6 +671,13 @@
         display: none !important;
       }
 
+      /* Smooth transitions for all interactive elements */
+      .nav-link,
+      .neu-button,
+      .sidebar-toggle {
+        transition: all 0.2s ease-in-out;
+      }
+
       /* Additional responsive styles for sidebar footer */
       @media (max-width: 768px) {
         .sidebar-collapsed .sidebar-footer {
@@ -501,6 +687,82 @@
         .sidebar-collapsed .sidebar-theme-toggle,
         .sidebar-collapsed .sidebar-user-info {
           padding: 0.5rem;
+        }
+
+        /* Mobile-specific footer adjustments */
+        .sidebar-footer {
+          padding: 1rem;
+        }
+
+        .sidebar-theme-toggle,
+        .sidebar-user-info {
+          padding: 0.875rem;
+        }
+      }
+
+      /* Tablet responsive styles */
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .sidebar {
+          width: 240px;
+        }
+
+        .sidebar-collapsed {
+          width: 80px;
+        }
+
+        .content {
+          margin-left: 240px;
+        }
+
+        .sidebar-collapsed ~ .content {
+          margin-left: 70px;
+        }
+
+        /* Adjust font sizes for tablets */
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+        }
+
+        .nav-text {
+          font-size: 0.95rem;
+        }
+      }
+
+      /* Large desktop styles */
+      @media (min-width: 1280px) {
+        .sidebar {
+          width: 280px;
+        }
+
+        .sidebar-collapsed {
+          width: 80px;
+        }
+
+        .content {
+          margin-left: 280px;
+        }
+
+        .sidebar-collapsed ~ .content {
+          margin-left: 85px;
+        }
+      }
+
+      /* Ultra-wide screen styles */
+      @media (min-width: 1536px) {
+        .sidebar {
+          width: 300px;
+        }
+
+        .sidebar-collapsed {
+          width: 80px;
+        }
+
+        .content {
+          margin-left: 300px;
+        }
+
+        .sidebar-collapsed ~ .content {
+          margin-left: 90px;
         }
       }
     </style>
@@ -540,8 +802,15 @@
         >
           My Portfolio
         </h1>
-        <button id="sidebarToggle" class="p-2 hamburger neu-button neu-pill">
-          <i data-lucide="menu" class="w-5 h-5"></i>
+        <button
+          id="sidebarToggle"
+          class="p-2 hamburger neu-button neu-pill"
+          aria-label="Toggle sidebar"
+        >
+          <i
+            data-lucide="menu"
+            class="w-5 h-5 transition-transform duration-300"
+          ></i>
         </button>
       </div>
 
@@ -658,12 +927,15 @@
             </div>
             <button
               id="theme-toggle"
-              class="dark-mode-toggle w-10 h-5 flex items-center rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300"
+              class="dark-mode-toggle p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 flex items-center justify-center"
               aria-label="Toggle theme"
             >
-              <div
-                class="w-3 h-3 rounded-full bg-white dark:bg-gray-200 shadow transform transition-transform duration-300 m-0.5"
-              ></div>
+              <!-- Single dynamic Lucide icon -->
+              <i
+                id="theme-icon"
+                data-lucide="sun"
+                class="w-5 h-5 text-amber-600 dark:text-amber-400 transition-all duration-300 transform hover:scale-110"
+              ></i>
             </button>
           </div>
 
@@ -784,6 +1056,20 @@
             .sidebar-user-info .text-sm {
               font-size: 0.75rem;
             }
+
+            /* Small screen collapsed theme toggle */
+            .sidebar-collapsed .sidebar-theme-toggle {
+              padding: 0.375rem 0.125rem;
+            }
+
+            .sidebar-collapsed .dark-mode-toggle {
+              padding: 0.25rem;
+            }
+
+            .sidebar-collapsed .dark-mode-toggle .w-5 {
+              width: 0.875rem; /* 14px */
+              height: 0.875rem; /* 14px */
+            }
           }
 
           /* Collapsed sidebar adjustments */
@@ -797,6 +1083,20 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+          }
+
+          /* Mobile collapsed theme toggle adjustments */
+          .sidebar-collapsed .sidebar-theme-toggle {
+            padding: 0.5rem 0.25rem;
+          }
+
+          .sidebar-collapsed .dark-mode-toggle {
+            padding: 0.375rem;
+          }
+
+          .sidebar-collapsed .dark-mode-toggle .w-5 {
+            width: 1rem; /* 16px */
+            height: 1rem; /* 16px */
           }
 
           .sidebar-collapsed .theme-text,
@@ -821,8 +1121,14 @@
           }
 
           .sidebar-collapsed .sidebar-theme-toggle .w-8,
-          .sidebar-collapsed .user-icon {
+          .sidebar-collapsed .user-icon,
+          .sidebar-collapsed .w-5,
+          .sidebar-collapsed .w-4,
+          .sidebar-collapsed .dark-mode-toggle {
             margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           .sidebar-collapsed .logout-btn,
@@ -832,13 +1138,18 @@
           }
 
           .sidebar-collapsed .logout-btn span,
-          .sidebar-collapsed .login-btn span {
-            display: none;
+          .sidebar-collapsed .login-btn span,
+          .sidebar-collapsed .logout-btn p,
+          .sidebar-collapsed .login-btn p {
+            display: none !important;
           }
 
           .sidebar-collapsed .logout-btn i,
           .sidebar-collapsed .login-btn i {
             margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           /* Ensure proper spacing when collapsed */
@@ -958,15 +1269,21 @@
         if (isMobile()) {
           // On mobile, start with sidebar hidden
           sidebar.classList.remove("mobile-expanded");
+          sidebar.classList.remove("sidebar-collapsed");
           sidebarOverlay.classList.remove("active");
           document.body.classList.remove("overflow-hidden");
         } else {
           // On desktop, respect the saved collapsed state
           if (isCollapsed) {
             sidebar.classList.add("sidebar-collapsed");
+            sidebar.classList.remove("mobile-expanded");
           } else {
             sidebar.classList.remove("sidebar-collapsed");
+            sidebar.classList.remove("mobile-expanded");
           }
+          // Hide mobile overlay on desktop
+          sidebarOverlay.classList.remove("active");
+          document.body.classList.remove("overflow-hidden");
         }
       }
 
@@ -976,21 +1293,28 @@
       // Toggle sidebar collapse (desktop)
       sidebarToggle.addEventListener("click", function () {
         if (isMobile()) {
-          // On mobile, clicking the toggle should close the sidebar
-          sidebar.classList.remove("mobile-expanded");
-          sidebarOverlay.classList.remove("active");
-          document.body.classList.remove("overflow-hidden");
+          // On mobile, toggle the sidebar visibility
+          sidebar.classList.toggle("mobile-expanded");
+          if (sidebar.classList.contains("mobile-expanded")) {
+            sidebarOverlay.classList.add("active");
+            document.body.classList.add("overflow-hidden");
+          } else {
+            sidebarOverlay.classList.remove("active");
+            document.body.classList.remove("overflow-hidden");
+          }
         } else {
-          // On desktop, toggle collapsed state
+          // On desktop, toggle collapsed state with smooth transition
           sidebar.classList.toggle("sidebar-collapsed");
 
-          // Update icon
+          // Update localStorage
           if (sidebar.classList.contains("sidebar-collapsed")) {
-            hamburgerIcon.setAttribute("data-lucide", "menu");
             localStorage.setItem("sidebarCollapsed", "true");
+            // Rotate icon for visual feedback
+            hamburgerIcon.style.transform = "rotate(180deg)";
           } else {
-            hamburgerIcon.setAttribute("data-lucide", "menu");
             localStorage.setItem("sidebarCollapsed", "false");
+            // Reset icon rotation
+            hamburgerIcon.style.transform = "rotate(0deg)";
           }
         }
 
@@ -1003,11 +1327,18 @@
         sidebar.classList.add("mobile-expanded");
         sidebarOverlay.classList.add("active");
         document.body.classList.add("overflow-hidden");
+
+        // Add animation class for smooth opening
+        sidebar.classList.add("sidebar-opening");
+        setTimeout(() => {
+          sidebar.classList.remove("sidebar-opening");
+        }, 300);
       });
 
       // Close sidebar when clicking overlay
       sidebarOverlay.addEventListener("click", function () {
         sidebar.classList.remove("mobile-expanded");
+        sidebar.classList.remove("sidebar-opening");
         sidebarOverlay.classList.remove("active");
         document.body.classList.remove("overflow-hidden");
       });
@@ -1016,9 +1347,14 @@
       document.querySelectorAll(".nav-link").forEach((link) => {
         link.addEventListener("click", function () {
           if (isMobile()) {
-            sidebar.classList.remove("mobile-expanded");
-            sidebarOverlay.classList.remove("active");
-            document.body.classList.remove("overflow-hidden");
+            // Add closing animation
+            sidebar.classList.add("sidebar-closing");
+            setTimeout(() => {
+              sidebar.classList.remove("mobile-expanded");
+              sidebar.classList.remove("sidebar-closing");
+              sidebarOverlay.classList.remove("active");
+              document.body.classList.remove("overflow-hidden");
+            }, 200);
           }
         });
       });
@@ -1029,17 +1365,31 @@
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           const nowMobile = isMobile();
+          const wasMobile =
+            !sidebar.classList.contains("sidebar-collapsed") &&
+            !sidebar.classList.contains("mobile-expanded");
+
           // Reset sidebar state when switching between mobile/desktop
           if (nowMobile) {
+            // Transitioning to mobile view
+            sidebar.classList.remove("sidebar-collapsed");
             sidebar.classList.remove("mobile-expanded");
             sidebarOverlay.classList.remove("active");
             document.body.classList.remove("overflow-hidden");
           } else {
+            // Transitioning to desktop view
             sidebar.classList.remove("mobile-expanded");
+            sidebar.classList.remove("sidebar-opening");
+            sidebar.classList.remove("sidebar-closing");
             sidebarOverlay.classList.remove("active");
             document.body.classList.remove("overflow-hidden");
+
+            // Apply saved collapsed state
+            if (localStorage.getItem("sidebarCollapsed") === "true") {
+              sidebar.classList.add("sidebar-collapsed");
+            }
           }
-        }, 100);
+        }, 150);
       });
 
       // Prevent body scroll when sidebar is open on mobile
@@ -1067,21 +1417,28 @@
 
         // Update theme toggle button appearance
         const themeToggle = document.getElementById("theme-toggle");
-        if (themeToggle) {
-          const toggleHandle = themeToggle.querySelector("div");
-          if (toggleHandle) {
-            if (isDark) {
-              // Move handle to the right for dark mode
-              toggleHandle.style.transform = "translateX(20px)";
-              themeToggle.classList.remove("bg-gray-300");
-              themeToggle.classList.add("bg-gray-600");
-            } else {
-              // Move handle to the left for light mode
-              toggleHandle.style.transform = "translateX(0)";
-              themeToggle.classList.remove("bg-gray-600");
-              themeToggle.classList.add("bg-gray-300");
-            }
+        const themeIcon = document.getElementById("theme-icon");
+
+        if (themeToggle && themeIcon) {
+          if (isDark) {
+            // Update to dark mode styling
+            themeToggle.classList.remove("bg-gray-200", "hover:bg-gray-300");
+            themeToggle.classList.add("bg-gray-700", "hover:bg-gray-600");
+            // Update icon to moon
+            themeIcon.setAttribute("data-lucide", "moon");
+            themeIcon.classList.remove("text-amber-600");
+            themeIcon.classList.add("text-blue-400");
+          } else {
+            // Update to light mode styling
+            themeToggle.classList.remove("bg-gray-700", "hover:bg-gray-600");
+            themeToggle.classList.add("bg-gray-200", "hover:bg-gray-300");
+            // Update icon to sun
+            themeIcon.setAttribute("data-lucide", "sun");
+            themeIcon.classList.remove("text-blue-400");
+            themeIcon.classList.add("text-amber-600");
           }
+          // Refresh Lucide icons
+          lucide.createIcons();
         }
 
         // Update theme icon (for the old toggle if it exists)
@@ -1111,31 +1468,44 @@
           document.documentElement.classList.add("dark");
           // Update toggle button for dark mode
           const themeToggle = document.getElementById("theme-toggle");
-          if (themeToggle) {
-            const toggleHandle = themeToggle.querySelector("div");
-            if (toggleHandle) {
-              toggleHandle.style.transform = "translateX(20px)";
-              themeToggle.classList.remove("bg-gray-300");
-              themeToggle.classList.add("bg-gray-600");
-            }
+          const themeIcon = document.getElementById("theme-icon");
+          if (themeToggle && themeIcon) {
+            themeToggle.classList.remove("bg-gray-200", "hover:bg-gray-300");
+            themeToggle.classList.add("bg-gray-700", "hover:bg-gray-600");
+            themeIcon.setAttribute("data-lucide", "moon");
+            themeIcon.classList.remove("text-amber-600");
+            themeIcon.classList.add("text-blue-400");
           }
         } else {
           // Update toggle button for light mode
           const themeToggle = document.getElementById("theme-toggle");
-          if (themeToggle) {
-            const toggleHandle = themeToggle.querySelector("div");
-            if (toggleHandle) {
-              toggleHandle.style.transform = "translateX(0)";
-              themeToggle.classList.remove("bg-gray-600");
-              themeToggle.classList.add("bg-gray-300");
-            }
+          const themeIcon = document.getElementById("theme-icon");
+          if (themeToggle && themeIcon) {
+            themeToggle.classList.remove("bg-gray-700", "hover:bg-gray-600");
+            themeToggle.classList.add("bg-gray-200", "hover:bg-gray-300");
+            themeIcon.setAttribute("data-lucide", "sun");
+            themeIcon.classList.remove("text-blue-400");
+            themeIcon.classList.add("text-amber-600");
           }
         }
       }
 
-      // Initialize theme on page load
+      // Initialize theme and sidebar state on page load
       document.addEventListener("DOMContentLoaded", function () {
         initTheme();
+
+        // Initialize sidebar icon rotation
+        if (isCollapsed && !isMobile()) {
+          hamburgerIcon.style.transform = "rotate(180deg)";
+        } else {
+          hamburgerIcon.style.transform = "rotate(0deg)";
+        }
+
+        // Ensure theme toggle works regardless of sidebar state
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+          themeToggle.addEventListener("click", toggleTheme);
+        }
       });
 
       // Add event listener to theme toggle footer button
@@ -1149,6 +1519,102 @@
       if (newThemeToggle) {
         newThemeToggle.addEventListener("click", toggleTheme);
       }
+
+      // Function to toggle flip effect
+      function toggleFlip(element) {
+        element.classList.toggle("flipped");
+      }
+
+      // Update flip display based on theme changes
+      function updateFlipDisplay() {
+        const isDark = document.documentElement.classList.contains("dark");
+        const flipContainers = document.querySelectorAll(
+          ".flip-container:not(#theme-toggle)"
+        );
+
+        flipContainers.forEach((container) => {
+          // In dark mode, ensure the sleep image shows initially (unless user has flipped)
+          if (isDark && !container.classList.contains("user-flipped")) {
+            // Only add flipped class if it doesn't already have it
+            if (!container.classList.contains("flipped")) {
+              container.classList.add("flipped");
+            }
+          } else if (!isDark) {
+            // In light mode, remove flipped class unless user specifically flipped it
+            if (!container.classList.contains("user-flipped")) {
+              container.classList.remove("flipped");
+            }
+          }
+        });
+      }
+
+      // Update flip display when theme changes
+      function toggleTheme(event) {
+        // Prevent default link behavior for footer theme toggle
+        if (event) {
+          event.preventDefault();
+        }
+
+        // Toggle dark class on html element
+        document.documentElement.classList.toggle("dark");
+        const isDark = document.documentElement.classList.contains("dark");
+
+        // Save preference to localStorage
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+
+        // Update theme toggle button appearance
+        const themeToggle = document.getElementById("theme-toggle");
+        const themeIcon = document.getElementById("theme-icon");
+
+        if (themeToggle && themeIcon) {
+          if (isDark) {
+            // Update to dark mode styling
+            themeToggle.classList.remove("bg-gray-200", "hover:bg-gray-300");
+            themeToggle.classList.add("bg-gray-700", "hover:bg-gray-600");
+            // Update icon to moon
+            themeIcon.setAttribute("data-lucide", "moon");
+            themeIcon.classList.remove("text-amber-600");
+            themeIcon.classList.add("text-blue-400");
+          } else {
+            // Update to light mode styling
+            themeToggle.classList.remove("bg-gray-700", "hover:bg-gray-600");
+            themeToggle.classList.add("bg-gray-200", "hover:bg-gray-300");
+            // Update icon to sun
+            themeIcon.setAttribute("data-lucide", "sun");
+            themeIcon.classList.remove("text-blue-400");
+            themeIcon.classList.add("text-amber-600");
+          }
+          // Refresh Lucide icons
+          lucide.createIcons();
+        }
+
+        // Update flip display based on new theme
+        updateFlipDisplay();
+      }
+
+      // Add click handler to flip containers to mark as user-flipped
+      document.addEventListener("DOMContentLoaded", function () {
+        const flipContainers = document.querySelectorAll(".flip-container");
+
+        flipContainers.forEach((container) => {
+          // Skip the theme toggle element
+          if (container.id !== "theme-toggle") {
+            container.addEventListener("click", function (e) {
+              // Prevent event bubbling if needed
+              e.stopPropagation();
+
+              // Mark this container as having been flipped by the user
+              this.classList.add("user-flipped");
+
+              // Toggle the flip state
+              this.classList.toggle("flipped");
+            });
+          }
+        });
+
+        // Update flip display when DOM is loaded
+        updateFlipDisplay();
+      });
     </script>
   </body>
 </html>

@@ -10,22 +10,36 @@
       <!-- Profile Image - Responsive sizing -->
       <div class="w-full lg:w-2/5 mb-6 lg:mb-0 flex-shrink-0">
         <div
-          class="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 mx-auto rounded-full overflow-hidden"
+          class="flip-container w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 mx-auto rounded-full overflow-hidden cursor-pointer"
           style="
             background: var(--neu-bg);
             box-shadow: var(--neu-outset-shadow);
             border: 4px solid rgba(255, 255, 255, 0.4);
           "
+          onclick="toggleFlip(this)"
         >
-          {% if profile.image %}
-          <img
-            src="{{ profile.image.url }}"
-            alt="{{ profile.name }}"
-            class="w-full h-full object-cover"
-          />
-          {% else %}
-          <i data-lucide="user" class="w-full h-full text-gray-400 p-6"></i>
-          {% endif %}
+          <div class="flipper">
+            <!-- Front of card - shows in light mode or when flipped back -->
+            <div class="front">
+              {% if profile.image %}
+              <img
+                src="{{ profile.image.url }}"
+                alt="{{ profile.name }}"
+                class="w-full h-full object-cover"
+              />
+              {% else %}
+              <i data-lucide="user" class="w-full h-full text-gray-400 p-6"></i>
+              {% endif %}
+            </div>
+            <!-- Back of card - shows in dark mode or when flipped -->
+            <div class="back">
+              <img
+                src="{% static 'sleep.png' %}"
+                alt="Sleep mode - {{ profile.name }}"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -132,13 +146,30 @@
           <!-- Project image (even larger size, always on the left) -->
           <div class="w-full sm:w-1/2 flex-shrink-0">
             {% if project.image %}
-            <div class="aspect-square rounded-lg overflow-hidden">
-              <img
-                src="{{ project.image.url }}"
-                alt="{{ project.title }}"
-                class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                loading="lazy"
-              />
+            <div
+              class="flip-container aspect-square rounded-lg overflow-hidden cursor-pointer"
+              onclick="toggleFlip(this)"
+            >
+              <div class="flipper">
+                <!-- Front of card - shows in light mode or when flipped back -->
+                <div class="front">
+                  <img
+                    src="{{ project.image.url }}"
+                    alt="{{ project.title }}"
+                    class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <!-- Back of card - shows in dark mode or when flipped -->
+                <div class="back">
+                  <img
+                    src="{% static 'sleep.png' %}"
+                    alt="Sleep mode - {{ project.title }}"
+                    class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
             </div>
             {% else %}
             <div
