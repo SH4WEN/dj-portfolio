@@ -17,6 +17,10 @@ import urllib.parse
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
+# Cloudinary is automatically configured via settings.py
+# The CloudinaryField should handle URL generation properly
+
+
 def home(request):
     profile = Profile.objects.first()  # Get the first profile
     projects = Project.objects.all().order_by('-created_at')[:2]  # Only get the 2 latest projects
