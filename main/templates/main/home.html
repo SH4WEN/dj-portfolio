@@ -1,5 +1,6 @@
-{% extends "main/base.html" %} {% block content %} {% load static %}
+{% extends "main/base.html" %} {% load static %} {% block content %}
 <!--  -->
+
 <div class="max-w-7xl mx-auto px-2 sm:px-4">
   {% with profile=profiles.first %}
   <!-- Profile Section -->
@@ -10,36 +11,34 @@
       <!-- Profile Image - Responsive sizing -->
       <div class="w-full lg:w-2/5 mb-6 lg:mb-0 flex-shrink-0">
         <div
-          class="flip-container w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 mx-auto rounded-full overflow-hidden cursor-pointer"
+          class="flip-container profile-flip w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 mx-auto rounded-full overflow-hidden cursor-pointer"
           style="
             background: var(--neu-bg);
             box-shadow: var(--neu-outset-shadow);
             border: 4px solid rgba(255, 255, 255, 0.4);
           "
-          onclick="toggleFlip(this)"
         >
-          <div class="flipper">
-            <!-- Front of card - shows in light mode or when flipped back -->
+          <div>
+            <!-- <!-- Front of card -->
             <div class="front">
               {% if profile.image %}
               <img
                 src="{{ profile.image.url }}"
                 alt="{{ profile.name }}"
                 class="w-full h-full object-cover"
-                onerror="this.onerror=null; this.src='/static/sleep.png'; this.alt='Profile image not available';"
               />
               {% else %}
               <i data-lucide="user" class="w-full h-full text-gray-400 p-6"></i>
               {% endif %}
             </div>
-            <!-- Back of card - shows in dark mode or when flipped -->
-            <div class="back">
+            <!-- Back of card - shows sleep.png in dark mode or when flipped -->
+            <!-- <div class="back">
               <img
                 src="{% static 'sleep.png' %}"
                 alt="Sleep mode - {{ profile.name }}"
                 class="w-full h-full object-cover"
               />
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -147,32 +146,12 @@
           <!-- Project image (even larger size, always on the left) -->
           <div class="w-full sm:w-1/2 flex-shrink-0">
             {% if project.image %}
-            <div
-              class="flip-container aspect-square rounded-lg overflow-hidden cursor-pointer"
-              onclick="toggleFlip(this)"
-            >
-              <div class="flipper">
-                <!-- Front of card - shows in light mode or when flipped back -->
-                <div class="front">
-                  <img
-                    src="{{ project.image.url }}"
-                    alt="{{ project.title }}"
-                    class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
-                    onerror="this.onerror=null; this.src='/static/sleep.png'; this.alt='Image not available';"
-                  />
-                </div>
-                <!-- Back of card - shows in dark mode or when flipped -->
-                <div class="back">
-                  <img
-                    src="{% static 'sleep.png' %}"
-                    alt="Sleep mode - {{ project.title }}"
-                    class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </div>
+            <img
+              src="{{ project.image.url }}"
+              alt="{{ project.title }}"
+              class="aspect-square rounded-lg object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+            />
             {% else %}
             <div
               class="aspect-square rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center"
@@ -300,6 +279,10 @@
       closeProjectModal();
     }
   });
+
+  function toggleFlip(element) {
+    element.classList.toggle("flipped");
+  }
 </script>
 
 <style>
@@ -317,5 +300,35 @@
     animation: fadeInUp 0.6s ease-out forwards;
     opacity: 0;
   }
+  .flip-container {
+    perspective: 1000px;
+  }
+
+  .flipper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-container.flipped .flipper {
+    transform: rotateY(180deg);
+  }
+
+  .front,
+  .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 9999px; /* keeps it perfectly circular */
+    overflow: hidden;
+  }
+
+  .back {
+    transform: rotateY(180deg);
+  }
 </style>
+
 {% endblock %}

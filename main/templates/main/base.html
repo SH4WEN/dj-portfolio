@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -541,39 +540,40 @@
         transform: rotateY(180deg);
       }
 
-      /* Default state - front visible, back hidden */
-      .front {
+      /* Profile flip containers - theme-aware behavior */
+      /* Default state (light mode) - show front (Cloudinary image) */
+      .flip-container.profile-flip.theme-light:not(.manually-flipped) .front {
         display: block;
       }
 
-      .back {
+      .flip-container.profile-flip.theme-light:not(.manually-flipped) .back {
         display: none;
       }
 
-      /* When flipped - back visible, front hidden */
-      .flip-container.flipped .front {
+      /* Dark mode - show back (sleep image) by default */
+      .flip-container.profile-flip.theme-dark:not(.manually-flipped) .front {
         display: none;
       }
 
-      .flip-container.flipped .back {
+      .flip-container.profile-flip.theme-dark:not(.manually-flipped) .back {
         display: block;
       }
 
-      /* Dark mode specific image display - sleep image always shows in dark mode */
-      .dark .flip-container:not(.flipped) .front {
+      /* When manually flipped in light mode - show back (sleep image) */
+      .flip-container.profile-flip.theme-light.manually-flipped .front {
         display: none;
       }
 
-      .dark .flip-container:not(.flipped) .back {
+      .flip-container.profile-flip.theme-light.manually-flipped .back {
         display: block;
       }
 
-      /* When in dark mode and flipped, show front (normal image) */
-      .dark .flip-container.flipped .front {
+      /* When manually flipped in dark mode - show front (Cloudinary image) */
+      .flip-container.profile-flip.theme-dark.manually-flipped .front {
         display: block;
       }
 
-      .dark .flip-container.flipped .back {
+      .flip-container.profile-flip.theme-dark.manually-flipped .back {
         display: none;
       }
 
@@ -1519,102 +1519,6 @@
       if (newThemeToggle) {
         newThemeToggle.addEventListener("click", toggleTheme);
       }
-
-      // Function to toggle flip effect
-      function toggleFlip(element) {
-        element.classList.toggle("flipped");
-      }
-
-      // Update flip display based on theme changes
-      function updateFlipDisplay() {
-        const isDark = document.documentElement.classList.contains("dark");
-        const flipContainers = document.querySelectorAll(
-          ".flip-container:not(#theme-toggle)"
-        );
-
-        flipContainers.forEach((container) => {
-          // In dark mode, ensure the sleep image shows initially (unless user has flipped)
-          if (isDark && !container.classList.contains("user-flipped")) {
-            // Only add flipped class if it doesn't already have it
-            if (!container.classList.contains("flipped")) {
-              container.classList.add("flipped");
-            }
-          } else if (!isDark) {
-            // In light mode, remove flipped class unless user specifically flipped it
-            if (!container.classList.contains("user-flipped")) {
-              container.classList.remove("flipped");
-            }
-          }
-        });
-      }
-
-      // Update flip display when theme changes
-      function toggleTheme(event) {
-        // Prevent default link behavior for footer theme toggle
-        if (event) {
-          event.preventDefault();
-        }
-
-        // Toggle dark class on html element
-        document.documentElement.classList.toggle("dark");
-        const isDark = document.documentElement.classList.contains("dark");
-
-        // Save preference to localStorage
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-
-        // Update theme toggle button appearance
-        const themeToggle = document.getElementById("theme-toggle");
-        const themeIcon = document.getElementById("theme-icon");
-
-        if (themeToggle && themeIcon) {
-          if (isDark) {
-            // Update to dark mode styling
-            themeToggle.classList.remove("bg-gray-200", "hover:bg-gray-300");
-            themeToggle.classList.add("bg-gray-700", "hover:bg-gray-600");
-            // Update icon to moon
-            themeIcon.setAttribute("data-lucide", "moon");
-            themeIcon.classList.remove("text-amber-600");
-            themeIcon.classList.add("text-blue-400");
-          } else {
-            // Update to light mode styling
-            themeToggle.classList.remove("bg-gray-700", "hover:bg-gray-600");
-            themeToggle.classList.add("bg-gray-200", "hover:bg-gray-300");
-            // Update icon to sun
-            themeIcon.setAttribute("data-lucide", "sun");
-            themeIcon.classList.remove("text-blue-400");
-            themeIcon.classList.add("text-amber-600");
-          }
-          // Refresh Lucide icons
-          lucide.createIcons();
-        }
-
-        // Update flip display based on new theme
-        updateFlipDisplay();
-      }
-
-      // Add click handler to flip containers to mark as user-flipped
-      document.addEventListener("DOMContentLoaded", function () {
-        const flipContainers = document.querySelectorAll(".flip-container");
-
-        flipContainers.forEach((container) => {
-          // Skip the theme toggle element
-          if (container.id !== "theme-toggle") {
-            container.addEventListener("click", function (e) {
-              // Prevent event bubbling if needed
-              e.stopPropagation();
-
-              // Mark this container as having been flipped by the user
-              this.classList.add("user-flipped");
-
-              // Toggle the flip state
-              this.classList.toggle("flipped");
-            });
-          }
-        });
-
-        // Update flip display when DOM is loaded
-        updateFlipDisplay();
-      });
     </script>
   </body>
 </html>
