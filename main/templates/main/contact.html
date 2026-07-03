@@ -9,43 +9,16 @@
       Contact Me
     </h1>
 
-    <!-- Formal note about contact unavailability -->
-    <div
-      class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg dark:bg-yellow-900/20 dark:border-yellow-600"
-    >
-      <div class="flex items-start">
-        <div class="flex-shrink-0">
-          <i
-            data-lucide="alert-circle"
-            class="w-5 h-5 text-yellow-400 dark:text-yellow-500"
-          ></i>
-        </div>
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-            Contact Temporarily Unavailable
-          </h3>
-          <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
-            <p>
-              Please note that direct contact through this form is currently
-              unavailable. For inquiries, you can reach out to me through my
-              social media accounts listed below.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End of formal note -->
-
-    <!-- Add messages display -->
-    {% if messages %} {% for message in messages %}
-    <div
-      class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
-      role="alert"
-      id="django-message-{{ forloop.counter }}"
-    >
-      {{ message }}
-    </div>
-    {% endfor %} {% endif %}
+    <!-- Add hidden messages container for JS feedback modal -->
+    {% if messages %}
+      {% for message in messages %}
+      <div
+        class="hidden-message hidden"
+        data-type="{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}"
+        data-text="{{ message }}"
+      ></div>
+      {% endfor %}
+    {% endif %}
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
       <div>
@@ -129,54 +102,54 @@
         </div>
 
         <div class="mt-6 sm:mt-8">
-          <h3
-            class="font-medium text-sm sm:text-base text-gray-800 dark:text-white mb-3 sm:mb-4"
-          >
-            Connect with me on social media
-          </h3>
-          <div class="flex space-x-3 sm:space-x-4">
-            <a
-              href="https://github.com/SH4WEN"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <i
-                data-lucide="github"
-                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300"
-              ></i>
-            </a>
-            <a
-              href="https://www.facebook.com/sherwin.sarmiento.9678?mibextid=ZbWKwL"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <i
-                data-lucide="facebook"
-                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300"
-              ></i>
-            </a>
-            <a
-              href="#"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
-            >
-              <i
-                data-lucide="youtube"
-                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300"
-              ></i>
-            </a>
-            <!-- TikTok Icon using Font Awesome -->
-            <a
-              href="https://www.tiktok.com/@s4wen_?_r=1&_d=secCgYIASAHKAESPgo8%2BjI7h5ZYOAYr374%2BZ2RyNKTB0e1jT%2F41h6JR3iyENdR4ko5vSMaHo6PrKNzyoQR2vF5cHyTS7Nak0flcGgA%3D&_svg=1&checksum=13bec220afc58f7f6d81f10bc045f1d8a99c87d849e044a23e35db2155afbea3&item_author_type=1&sec_uid=MS4wLjABAAAA1s9qXjxp5vl2-n5FNKrAiN8lVYvie0zghdXUwhSshKWsSlhcMXaba1DpMWYptb3A&sec_user_id=MS4wLjABAAAA1s9qXjxp5vl2-n5FNKrAiN8lVYvie0zghdXUwhSshKWsSlhcMXaba1DpMWYptb3A&share_app_id=1180&share_author_id=7078276122349175809&share_link_id=1f995a03-4e0f-4b0b-b432-5de867479b0c&share_scene=1&sharer_language=en&social_share_type=5&source=h5_t&timestamp=1759852463&u_code=e0mja1dida1d3g&ug_btm=b8727%2Cb7360&ugbiz_name=ACCOUNT&user_id=7078276122349175809&utm_campaign=client_share&utm_medium=android&utm_source=copy"
-              class="p-3 rounded-full transition-colors neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
-            >
-              <i
-                class="fab fa-tiktok w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300"
-              ></i>
-            </a>
-          </div>
-        </div>
+  <h3 class="font-medium text-sm sm:text-base text-gray-800 dark:text-white mb-3 sm:mb-4">
+    Connect with me on social media
+  </h3>
+
+  <div class="flex space-x-3 sm:space-x-4">
+
+    <!-- GitHub -->
+    <a
+      href="https://github.com/SH4WEN"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="p-3 rounded-full neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
+    >
+      <i class="fa-brands fa-github text-xl text-gray-700 dark:text-gray-300"></i>
+    </a>
+
+    <!-- Facebook -->
+    <a
+      href="https://www.facebook.com/sherwin.sarmiento.9678?mibextid=ZbWKwL"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="p-3 rounded-full neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
+    >
+      <i class="fa-brands fa-facebook-f text-xl text-gray-700 dark:text-gray-300"></i>
+    </a>
+
+    <!-- YouTube -->
+    <a
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="p-3 rounded-full neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
+    >
+      <i class="fa-brands fa-youtube text-xl text-gray-700 dark:text-gray-300"></i>
+    </a>
+
+    <!-- TikTok -->
+    <a
+      href="https://www.tiktok.com/@s4wen_?_r=1"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="p-3 rounded-full neu-button neu-pill min-h-[44px] min-w-[44px] flex items-center justify-center friendly-hover"
+    >
+      <i class="fa-brands fa-tiktok text-xl text-gray-700 dark:text-gray-300"></i>
+    </a>
+
+  </div>
+</div>
       </div>
 
       <div>
@@ -274,7 +247,7 @@
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
 >
   <div
-    class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 neu-surface friendly-shadow"
+    class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 "
   >
     <div class="text-center">
       <div
@@ -349,12 +322,12 @@
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     background-color: #f9fafb;
-    color: #9ca3af; /* Gray text to indicate disabled state */
+    color: var(--neu-text);
     border: none;
     box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff;
     min-height: 44px;
     transition: all 0.2s ease;
-    cursor: not-allowed; /* Show cursor as not-allowed */
+    cursor: text;
   }
 
   /* Make placeholder text more visible */
@@ -363,12 +336,13 @@
   #id_subject::placeholder,
   #id_message::placeholder {
     color: #9ca3af;
-    opacity: 1; /* Firefox requires this */
+    opacity: 0.8;
   }
 
   #id_message {
     min-height: 120px;
-    resize: none; /* Disable resizing for disabled field */
+    resize: vertical;
+    cursor: text;
   }
 
   .dark #id_name,
@@ -376,7 +350,7 @@
   .dark #id_subject,
   .dark #id_message {
     background-color: #1f2937;
-    color: #9ca3af;
+    color: var(--neu-text);
     box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151;
   }
 
@@ -395,10 +369,8 @@
     box-shadow: inset 2px 2px 5px #111827, inset -2px -2px 5px #374151;
   }
 
-  /* Style the submit button as disabled */
   #submit-button {
-    opacity: 0.6;
-    cursor: not-allowed;
+    cursor: pointer;
   }
 
   /* Modal styles */
@@ -433,24 +405,26 @@
       lucide.createIcons();
     }
 
-    // Show modal immediately with unavailable message
-    showModal(
-      "Contact Form Unavailable",
-      "The contact form is temporarily unavailable. Sorry for the inconvenience! You can still reach me through my social media platforms",
-      "info"
-    );
+    // Check for Django messages to show feedback modal
+    const djangoMessages = document.querySelectorAll('.hidden-message');
+    if (djangoMessages.length > 0) {
+      djangoMessages.forEach(msg => {
+        const type = msg.dataset.type;
+        let title = "Notification";
+        if (type === 'success') {
+          title = "Message Sent!";
+        } else if (type === 'error') {
+          title = "Error Sending Message";
+        }
+        showModal(title, msg.dataset.text, type);
+      });
+    }
 
-    // Handle form submission
-    contactForm.addEventListener("submit", function (e) {
-      // Prevent form submission since it's unavailable
-      e.preventDefault();
-
-      // Show modal with unavailable message
-      showModal(
-        "Contact Form Unavailable",
-        "The contact form is temporarily unavailable. Sorry for the inconvenience! You can still reach me through my social media platforms",
-        "info"
-      );
+    // Handle form submission loading state
+    contactForm.addEventListener("submit", function () {
+      const submitBtn = document.getElementById("submit-button");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin mr-2"></i> Sending...';
     });
 
     // Modal close functionality

@@ -11,6 +11,8 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.http import FileResponse
 import urllib.parse
+import urllib.request
+import json
 
 
 # views.py
@@ -69,23 +71,43 @@ def contact(request):
                 subject = form.cleaned_data['subject']
                 message = form.cleaned_data['message']
                 
-                # Prepare email content
-                email_subject = f"New Contact Form Submission: {subject}"
-                email_message = f"""
-                Name: {name}
-                Email: {email}
-                Subject: {subject}
-                Message: {message}
-                """
-                
-                # Send email
-                send_mail(
-                    email_subject,
-                    email_message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [settings.CONTACT_EMAIL],  # Your email where you want to receive messages
-                    fail_silently=False,
-                )
+                # Check if Web3Forms access key is configured
+                web3forms_key = getattr(settings, 'WEB3FORMS_ACCESS_KEY', None)
+                if web3forms_key:
+                    url = "https://api.web3forms.com/submit"
+                    data = {
+                        "access_key": web3forms_key,
+                        "name": name,
+                        "email": email,
+                        "subject": f"New Contact: {subject}",
+                        "message": message,
+                        "from_name": f"{name} (via DJ Portfolio)"
+                    }
+                    encoded_data = urllib.parse.urlencode(data).encode("utf-8")
+                    req = urllib.request.Request(url, data=encoded_data, method="POST")
+                    req.add_header("Content-Type", "application/x-www-form-urlencoded")
+                    req.add_header("User-Agent", "Mozilla/5.0")
+                    
+                    with urllib.request.urlopen(req) as response:
+                        res_data = json.loads(response.read().decode("utf-8"))
+                        if not res_data.get("success", False):
+                            raise Exception(f"Web3Forms error: {res_data.get('message', 'Unknown error')}")
+                else:
+                    # Fallback to standard SMTP
+                    email_subject = f"New Contact Form Submission: {subject}"
+                    email_message = f"""
+                    Name: {name}
+                    Email: {email}
+                    Subject: {subject}
+                    Message: {message}
+                    """
+                    send_mail(
+                        email_subject,
+                        email_message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [settings.CONTACT_EMAIL],  # Your email where you want to receive messages
+                        fail_silently=False,
+                    )
                 
                 messages.success(request, 'Your message has been sent successfully!')
                 return redirect('contact')  # Redirect to clear the form

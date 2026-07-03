@@ -180,3 +180,4 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Your email
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your email password or app password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Your email
 CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages
+WEB3FORMS_ACCESS_KEY = os.environ.get('c483993c-456d-47af-bccf-6742477420d5')
