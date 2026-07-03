@@ -104,25 +104,14 @@ def download_cv(request):
     Serve static CV file for download
     """
     # Define the path to the CV file
-    cv_filename = "Sarmiento,Sherwin.pdf"
+    cv_filename = "SARMIENTO SHERWIN Q.pdf"
     cv_path = os.path.join(settings.STATIC_ROOT, 'main', 'cv', cv_filename)
     
     # Alternative path in static directory
     if not os.path.exists(cv_path):
         cv_path = os.path.join(settings.STATICFILES_DIRS[0], 'main', 'cv', cv_filename)
     
-    # Check if file exists
-    if not os.path.exists(cv_path):
-        # Try without the comma in filename (URL encoded)
-        cv_filename_alt = "SarmientoSherwin.pdf"
-        cv_path_alt = os.path.join(settings.STATIC_ROOT, 'main', 'cv', cv_filename_alt)
-        if not os.path.exists(cv_path_alt):
-            cv_path_alt = os.path.join(settings.STATICFILES_DIRS[0], 'main', 'cv', cv_filename_alt)
-        if os.path.exists(cv_path_alt):
-            cv_path = cv_path_alt
-            cv_filename = cv_filename_alt
-    
-    # If still not found, raise 404
+    # If not found, raise 404
     if not os.path.exists(cv_path):
         raise Http404("CV not found")
     

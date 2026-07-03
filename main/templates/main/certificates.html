@@ -14,8 +14,14 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       {% for certificate in certificates %}
       <div
-        class="flex flex-col h-full rounded-lg overflow-hidden transition-all duration-300 transform hover:-translate-y-1 w-full animate-fade-in-up neu-surface"
+        class="flex flex-col h-full rounded-lg overflow-hidden transition-all duration-300 transform hover:-translate-y-1 w-full animate-fade-in-up neu-surface {% if certificate.image %}cursor-pointer certificate-card{% endif %}"
         style="animation-delay: 0.5s"
+        {% if certificate.image %}
+        data-image="{{ certificate.image.url }}"
+        data-title="{{ certificate.title }}"
+        data-org="{{ certificate.issuing_organization }}"
+        data-date="{{ certificate.date_issued|date:'F Y' }}"
+        {% endif %}
       >
         <!-- Card Image -->
         <div
@@ -150,4 +156,118 @@
     }
   }
 </style>
+<!-- Modal for viewing full certificate -->
+<div
+  id="certificateModal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300"
+>
+  <!-- Modal Content Container -->
+  <div 
+    id="modalContent"
+    class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center transform scale-90 opacity-0 transition-all duration-300"
+  >
+   
+    
+    <!-- Image Card -->
+    <div class="relative w-full overflow-hidden flex justify-center p-3 bg-transparent">
+      
+       <!-- Close Button -->
+    <button
+      id="closeCertModal"
+      class="absolute top-4 right-4 p-2 text-white/80 hover:text-white bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full transition-all focus:outline-none cursor-pointer z-10 shadow-md"
+      aria-label="Close modal"
+    >
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <img
+        id="modalImage"
+        src=""
+        alt=""
+        class="max-w-full max-h-[70vh] object-contain rounded-xl"
+      />
+    </div>
+    
+    <!-- Title and Details Card -->
+    <div class="mt-4 w-full p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center text-white shadow-lg">
+      <h3 id="modalTitle" class="text-lg sm:text-xl font-bold tracking-wide"></h3>
+      <p class="text-xs sm:text-sm text-gray-300 mt-2 flex items-center justify-center gap-4">
+        <span><i data-lucide="building" class="w-4 h-4 inline mr-1"></i><span id="modalOrg"></span></span>
+        <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+        <span><i data-lucide="calendar" class="w-4 h-4 inline mr-1"></i><span id="modalDate"></span></span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('certificateModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalOrg = document.getElementById('modalOrg');
+    const modalDate = document.getElementById('modalDate');
+    const closeBtn = document.getElementById('closeCertModal');
+
+    // Open Modal
+    document.querySelectorAll('.certificate-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const imgUrl = card.dataset.image;
+        const title = card.dataset.title;
+        const org = card.dataset.org;
+        const date = card.dataset.date;
+
+        modalImage.src = imgUrl;
+        modalImage.alt = title;
+        modalTitle.textContent = title;
+        modalOrg.textContent = org;
+        modalDate.textContent = date;
+
+        // Initialize Lucide icons inside the modal just in case
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+
+        // Show modal with animation
+        modal.classList.remove('hidden');
+        // Trigger reflow
+        modal.offsetHeight; 
+        modal.classList.remove('opacity-0');
+        modal.classList.add('opacity-100');
+        modalContent.classList.remove('scale-90', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+        
+        // Prevent body scrolling
+        document.body.classList.add('overflow-hidden');
+      });
+    });
+
+    // Close Modal
+    function closeModal() {
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0');
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-90', 'opacity-0');
+      
+      // Wait for transition to complete
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 300);
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+  });
+</script>
 {% endblock %}
