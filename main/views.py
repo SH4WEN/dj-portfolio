@@ -88,7 +88,7 @@ def contact(request):
                     req.add_header("Content-Type", "application/x-www-form-urlencoded")
                     req.add_header("User-Agent", "Mozilla/5.0")
                     
-                    with urllib.request.urlopen(req) as response:
+                    with urllib.request.urlopen(req, timeout=10) as response:
                         res_data = json.loads(response.read().decode("utf-8"))
                         if not res_data.get("success", False):
                             raise Exception(f"Web3Forms error: {res_data.get('message', 'Unknown error')}")

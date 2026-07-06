@@ -20,6 +20,16 @@ services:
         value: sarmientosherwin11@gmail.com
       - key: DEFAULT_FROM_EMAIL
         value: sarmientosherwin11@gmail.com
+      - key: EMAIL_HOST_PASSWORD
+        sync: false  # Set this secret manually in Render dashboard
+      - key: WEB3FORMS_ACCESS_KEY
+        value: 1a01c24d-f3c1-42e3-90a6-0e031a917afe
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dtiw7yiao
+      - key: CLOUDINARY_API_KEY
+        value: 693954415863962
+      - key: CLOUDINARY_API_SECRET
+        sync: false  # Set this secret manually in Render dashboard
 # envVars:
 #   - key: DATABASE_URL
 #   fromDatabase:

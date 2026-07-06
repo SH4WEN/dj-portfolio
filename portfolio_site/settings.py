@@ -84,9 +84,17 @@ WSGI_APPLICATION = 'portfolio_site.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-DATABASES = {
-    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-} 
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 
@@ -168,6 +176,12 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+# CSRF trusted origins for Render deployment
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
 
 # Whitenoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -180,4 +194,4 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Your email
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your email password or app password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Your email
 CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages
-WEB3FORMS_ACCESS_KEY = os.environ.get('1a01c24d-f3c1-42e3-90a6-0e031a917afe')
+WEB3FORMS_ACCESS_KEY = os.environ.get('WEB3FORMS_ACCESS_KEY')
