@@ -10,9 +10,7 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.http import FileResponse
-import urllib.parse
-import urllib.request
-import json
+
 
 
 # views.py
@@ -70,45 +68,27 @@ def contact(request):
                 email = form.cleaned_data['email']
                 subject = form.cleaned_data['subject']
                 message = form.cleaned_data['message']
-                
-                # Check if Web3Forms access key is configured
-                web3forms_key = getattr(settings, 'WEB3FORMS_ACCESS_KEY', None)
-                if web3forms_key:
-                    url = "https://api.web3forms.com/submit"
-                    data = {
-                        "access_key": web3forms_key,
-                        "name": name,
-                        "email": email,
-                        "subject": f"New Contact: {subject}",
-                        "message": message,
-                        "from_name": f"{name} (via DJ Portfolio)"
-                    }
-                    encoded_data = urllib.parse.urlencode(data).encode("utf-8")
-                    req = urllib.request.Request(url, data=encoded_data, method="POST")
-                    req.add_header("Content-Type", "application/x-www-form-urlencoded")
-                    req.add_header("User-Agent", "Mozilla/5.0")
-                    
-                    with urllib.request.urlopen(req, timeout=10) as response:
-                        res_data = json.loads(response.read().decode("utf-8"))
-                        if not res_data.get("success", False):
-                            raise Exception(f"Web3Forms error: {res_data.get('message', 'Unknown error')}")
-                else:
-                    # Fallback to standard SMTP
-                    email_subject = f"New Contact Form Submission: {subject}"
-                    email_message = f"""
-                    Name: {name}
-                    Email: {email}
-                    Subject: {subject}
-                    Message: {message}
-                    """
-                    send_mail(
-                        email_subject,
-                        email_message,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [settings.CONTACT_EMAIL],  # Your email where you want to receive messages
-                        fail_silently=False,
-                    )
-                
+
+                # Send via Django SMTP (Gmail app password configured in .env)
+                email_subject = f"Portfolio Contact: {subject}"
+                email_message = f"""New message from your portfolio contact form:
+
+Name:    {name}
+Email:   {email}
+Subject: {subject}
+
+Message:
+{message}
+"""
+                send_mail(
+                    email_subject,
+                    email_message,
+                    settings.EMAIL_HOST_USER,       # From: your Gmail
+                    [settings.CONTACT_EMAIL],        # To: your inbox
+                    fail_silently=False,
+                    reply_to=[email],  # Reply-To: visitor's email
+                )
+
                 messages.success(request, 'Your message has been sent successfully!')
                 return redirect('contact')  # Redirect to clear the form
             except Exception as e:
@@ -118,7 +98,7 @@ def contact(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = ContactForm()
-    
+
     return render(request, 'main/contact.html', {'form': form})
 
 def download_cv(request):
