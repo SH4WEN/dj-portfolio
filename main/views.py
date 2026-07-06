@@ -58,18 +58,65 @@ def certificates(request):
         print(f"Error in certificates view: {e}")  # Check your server logs
         return render(request, 'main/certificates.html', {'certificates': []})
 
+# def contact(request):
+#     if request.method == 'POST':
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             try:
+#                 # Get form data
+#                 name = form.cleaned_data['name']
+#                 email = form.cleaned_data['email']
+#                 subject = form.cleaned_data['subject']
+#                 message = form.cleaned_data['message']
+
+#                 # Send via Django SMTP (Gmail app password configured in .env)
+#                 email_subject = f"Portfolio Contact: {subject}"
+#                 email_message = f"""New message from your portfolio contact form:
+
+# Name:    {name}
+# Email:   {email}
+# Subject: {subject}
+
+# Message:
+# {message}
+# """
+#                 msg = EmailMessage(
+#                     subject=email_subject,
+#                     body=email_message,
+#                     from_email=settings.EMAIL_HOST_USER,
+#                     to=[settings.CONTACT_EMAIL],
+#                     reply_to=[email],  # so you can reply directly to the visitor
+#                 )
+#                 msg.send(fail_silently=False)
+
+#                 messages.success(request, 'Your message has been sent successfully!')
+#                 return redirect('contact')  # Redirect to clear the form
+#             except Exception as e:
+#                 messages.error(request, 'There was an error sending your message. Please try again later.')
+#                 print(f"Email sending error: {e}")  # For debugging
+#         else:
+#             messages.error(request, 'Please correct the errors below.')
+#     else:
+#         form = ContactForm()
+
+#     return render(request, 'main/contact.html', {'form': form})
+
 def contact(request):
+    form_disabled = True  # Change to False to enable the form
+
     if request.method == 'POST':
+        if form_disabled:
+            messages.error(request, "The contact form is currently unavailable.")
+            return redirect('contact')
+
         form = ContactForm(request.POST)
         if form.is_valid():
             try:
-                # Get form data
                 name = form.cleaned_data['name']
                 email = form.cleaned_data['email']
                 subject = form.cleaned_data['subject']
                 message = form.cleaned_data['message']
 
-                # Send via Django SMTP (Gmail app password configured in .env)
                 email_subject = f"Portfolio Contact: {subject}"
                 email_message = f"""New message from your portfolio contact form:
 
@@ -80,27 +127,32 @@ Subject: {subject}
 Message:
 {message}
 """
+
                 msg = EmailMessage(
                     subject=email_subject,
                     body=email_message,
                     from_email=settings.EMAIL_HOST_USER,
                     to=[settings.CONTACT_EMAIL],
-                    reply_to=[email],  # so you can reply directly to the visitor
+                    reply_to=[email],
                 )
                 msg.send(fail_silently=False)
 
-                messages.success(request, 'Your message has been sent successfully!')
-                return redirect('contact')  # Redirect to clear the form
+                messages.success(request, "Your message has been sent successfully!")
+                return redirect('contact')
+
             except Exception as e:
-                messages.error(request, 'There was an error sending your message. Please try again later.')
-                print(f"Email sending error: {e}")  # For debugging
+                messages.error(request, "There was an error sending your message.")
+                print(e)
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, "Please correct the errors below.")
     else:
         form = ContactForm()
 
-    return render(request, 'main/contact.html', {'form': form})
-
+    return render(request, "main/contact.html", {
+        "form": form,
+        "form_disabled": form_disabled,
+    })
+    
 def download_cv(request):
     """
     Serve static CV file for download
