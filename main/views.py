@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.conf import settings
 from django.shortcuts import render, redirect
 from .forms import ContactForm
@@ -80,14 +80,14 @@ Subject: {subject}
 Message:
 {message}
 """
-                send_mail(
-                    email_subject,
-                    email_message,
-                    settings.EMAIL_HOST_USER,       # From: your Gmail
-                    [settings.CONTACT_EMAIL],        # To: your inbox
-                    fail_silently=False,
-                    reply_to=[email],  # Reply-To: visitor's email
+                msg = EmailMessage(
+                    subject=email_subject,
+                    body=email_message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=[settings.CONTACT_EMAIL],
+                    reply_to=[email],  # so you can reply directly to the visitor
                 )
+                msg.send(fail_silently=False)
 
                 messages.success(request, 'Your message has been sent successfully!')
                 return redirect('contact')  # Redirect to clear the form
