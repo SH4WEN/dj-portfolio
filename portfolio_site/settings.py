@@ -195,3 +195,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your email passwo
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Your email
 CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages
 WEB3FORMS_ACCESS_KEY = os.environ.get('WEB3FORMS_ACCESS_KEY')
+
+# Authentication redirects
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'

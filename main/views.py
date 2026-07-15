@@ -183,3 +183,14 @@ def download_cv(request):
 def custom_logout(request):
     logout(request)
     return redirect('home')  # Redirects to URL named 'home'
+
+from django.contrib.auth.views import LoginView
+
+class CustomLoginView(LoginView):
+    template_name = 'main/login.html'
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
+            return '/admin/'
+        return super().get_success_url()
