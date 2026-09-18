@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "sh4wen",
+  "version": "1.0.0",
+  "identifier": "com.sh4wen.app",
+  "build": {
+    "frontendDist": "../staticfiles",
+    "devUrl": "http://127.0.0.1:8000",
+    "beforeBuildCommand": "python manage.py collectstatic --noinput"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "sh4wen",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "android": {
+      "debugApplicationIdSuffix": ".debug"
+    }
+  }
+}

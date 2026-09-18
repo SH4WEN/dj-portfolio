@@ -1,1 +1,9 @@
 .env
+.venv/
+venv/
+node_modules/
+src-tauri/target/
+db.sqlite3
+*.pyc
+__pycache__/
+staticfiles/

@@ -142,6 +142,16 @@ dj-portfolio/
    python manage.py runserver
    ```
 
+8. **Run as Desktop App (Tauri)**
+   Ensure the Django server is running in step 7, then in another terminal window run:
+   ```bash
+   npm run tauri dev
+   ```
+   To build a standalone production desktop executable (.exe / installer):
+   ```bash
+   npm run tauri build
+   ```
+
 ## Troubleshooting
 
 ### Common Issues
