@@ -193,7 +193,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Your email
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your email password or app password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Your email
-CONTACT_EMAIL = 'sarmientosherwin11@gmail.com'  # Where you want to receive messages
+CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', os.environ.get('EMAIL_HOST_USER', 'sarmientosherwin11@gmail.com'))
 WEB3FORMS_ACCESS_KEY = os.environ.get('WEB3FORMS_ACCESS_KEY')
 
 # Authentication redirects

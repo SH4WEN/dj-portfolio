@@ -102,7 +102,7 @@ def certificates(request):
 #     return render(request, 'main/contact.html', {'form': form})
 
 def contact(request):
-    form_disabled = True  # Change to False to enable the form
+    form_disabled = False
 
     if request.method == 'POST':
         if form_disabled:
@@ -128,11 +128,14 @@ Message:
 {message}
 """
 
+                from_email = getattr(settings, 'EMAIL_HOST_USER', None) or getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+                recipient = getattr(settings, 'CONTACT_EMAIL', None) or from_email
+
                 msg = EmailMessage(
                     subject=email_subject,
                     body=email_message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    to=[settings.CONTACT_EMAIL],
+                    from_email=from_email,
+                    to=[recipient],
                     reply_to=[email],
                 )
                 msg.send(fail_silently=False)
@@ -141,8 +144,8 @@ Message:
                 return redirect('contact')
 
             except Exception as e:
-                messages.error(request, "There was an error sending your message.")
-                print(e)
+                print(f"Error sending email: {e}")
+                messages.error(request, f"There was an error sending your message. Details: {e}")
         else:
             messages.error(request, "Please correct the errors below.")
     else:
