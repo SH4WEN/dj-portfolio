@@ -4,9 +4,8 @@
   "version": "1.0.0",
   "identifier": "com.sh4wen.app",
   "build": {
-    "frontendDist": "../staticfiles",
-    "devUrl": "http://127.0.0.1:8000",
-    "beforeBuildCommand": "python manage.py collectstatic --noinput"
+    "frontendDist": "https://dj-portfolio-131o.onrender.com",
+    "devUrl": "https://dj-portfolio-131o.onrender.com"
   },
   "app": {
     "windows": [
