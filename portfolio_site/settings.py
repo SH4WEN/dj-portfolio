@@ -179,8 +179,12 @@ INTERNAL_IPS = [
 # CSRF trusted origins for Render deployment
 CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
+    'https://dj-portfolio-131o.onrender.com',
     'http://127.0.0.1:8000',
     'http://localhost:8000',
+    'http://localhost',
+    'https://tauri.localhost',
+    'http://tauri.localhost',
 ]
 
 # Whitenoise configuration

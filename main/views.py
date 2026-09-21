@@ -111,14 +111,44 @@ def contact(request):
 
         form = ContactForm(request.POST)
         if form.is_valid():
-            try:
-                name = form.cleaned_data['name']
-                email = form.cleaned_data['email']
-                subject = form.cleaned_data['subject']
-                message = form.cleaned_data['message']
+            sent = False
+            error_details = []
 
-                email_subject = f"Portfolio Contact: {subject}"
-                email_message = f"""New message from your portfolio contact form:
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+
+            # Strategy 1: Web3Forms API (HTTPS Port 443 - never blocked by Render cloud host)
+            web3forms_key = getattr(settings, 'WEB3FORMS_ACCESS_KEY', None) or os.environ.get('WEB3FORMS_ACCESS_KEY')
+            if web3forms_key:
+                try:
+                    import requests
+                    res = requests.post(
+                        "https://api.web3forms.com/submit",
+                        json={
+                            "access_key": web3forms_key,
+                            "name": name,
+                            "email": email,
+                            "subject": f"Portfolio Contact: {subject}",
+                            "message": message,
+                            "from_name": name,
+                        },
+                        timeout=10
+                    )
+                    res_data = res.json()
+                    if res.status_code == 200 and res_data.get("success"):
+                        sent = True
+                    else:
+                        error_details.append(f"Web3Forms: {res_data.get('message', 'Submission failed')}")
+                except Exception as w3e:
+                    error_details.append(f"Web3Forms HTTP error: {w3e}")
+
+            # Strategy 2: Django SMTP Fallback (if Web3Forms didn't send)
+            if not sent:
+                try:
+                    email_subject = f"Portfolio Contact: {subject}"
+                    email_message = f"""New message from your portfolio contact form:
 
 Name:    {name}
 Email:   {email}
@@ -127,25 +157,30 @@ Subject: {subject}
 Message:
 {message}
 """
+                    from_email = getattr(settings, 'EMAIL_HOST_USER', None) or getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+                    recipient = getattr(settings, 'CONTACT_EMAIL', None) or from_email
 
-                from_email = getattr(settings, 'EMAIL_HOST_USER', None) or getattr(settings, 'DEFAULT_FROM_EMAIL', None)
-                recipient = getattr(settings, 'CONTACT_EMAIL', None) or from_email
+                    if from_email and recipient:
+                        msg = EmailMessage(
+                            subject=email_subject,
+                            body=email_message,
+                            from_email=from_email,
+                            to=[recipient],
+                            reply_to=[email],
+                        )
+                        msg.send(fail_silently=False)
+                        sent = True
+                    else:
+                        error_details.append("Missing email configuration (EMAIL_HOST_USER/CONTACT_EMAIL)")
+                except Exception as smtpe:
+                    error_details.append(f"SMTP error: {smtpe}")
 
-                msg = EmailMessage(
-                    subject=email_subject,
-                    body=email_message,
-                    from_email=from_email,
-                    to=[recipient],
-                    reply_to=[email],
-                )
-                msg.send(fail_silently=False)
-
+            if sent:
                 messages.success(request, "Your message has been sent successfully!")
                 return redirect('contact')
-
-            except Exception as e:
-                print(f"Error sending email: {e}")
-                messages.error(request, f"There was an error sending your message. Details: {e}")
+            else:
+                err_msg = " | ".join(error_details) if error_details else "Failed to send message."
+                messages.error(request, f"Could not send email: {err_msg}")
         else:
             messages.error(request, "Please correct the errors below.")
     else:

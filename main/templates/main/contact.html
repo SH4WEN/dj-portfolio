@@ -15,7 +15,7 @@
       <div
         class="hidden-message hidden"
         data-type="{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}"
-        data-text="{{ message }}"
+        data-text="{{ message|escapejs }}"
       ></div>
       {% endfor %}
     {% endif %}
