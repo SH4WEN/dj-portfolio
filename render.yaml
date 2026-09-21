@@ -12,10 +12,12 @@ services:
     name: portfolio_site
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "python -m gunicorn portfolio_site.asgi:application -k uvicorn.workers.UvicornWorker"
+    startCommand: "gunicorn portfolio_site.wsgi:application"
     envVars:
       - key: SECRET_KEY
         generateValue: true
+      - key: DATABASE_URL
+        sync: false  # Set your PostgreSQL URL from Neon or Render in Render dashboard
       - key: EMAIL_HOST_USER
         value: sarmientosherwin11@gmail.com
       - key: DEFAULT_FROM_EMAIL
