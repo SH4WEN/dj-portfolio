@@ -9,6 +9,28 @@
       Contact Me
     </h1>
 
+    {% if form_disabled %}
+    <!-- Maintenance Banner Notice -->
+    <div class="mb-6 p-4 sm:p-5 rounded-xl border border-amber-500/30 bg-amber-50/90 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 shadow-sm">
+      <div class="flex items-start space-x-3 sm:space-x-4">
+        <div class="p-2 sm:p-2.5 bg-amber-500/10 dark:bg-amber-500/20 rounded-lg text-amber-600 dark:text-amber-400 flex-shrink-0">
+          <i data-lucide="wrench" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base sm:text-lg font-semibold text-amber-900 dark:text-amber-100 mb-1 flex items-center gap-2 flex-wrap">
+            <span>Notice: Contact Form Under Maintenance</span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100">
+              Temporary
+            </span>
+          </h3>
+          <p class="text-xs sm:text-sm text-amber-800 dark:text-amber-300 leading-relaxed">
+            The contact form is currently undergoing scheduled maintenance. In the meantime, please feel free to reach out directly via email (<a href="mailto:sherwinquitosarmiento@gmail.com" class="underline font-medium hover:text-amber-900 dark:hover:text-white">sherwinquitosarmiento@gmail.com</a>), phone (<a href="tel:+639516484646" class="underline font-medium hover:text-amber-900 dark:hover:text-white">+63 951 648 4646</a>), or social media links below.
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Add hidden messages container for JS feedback modal -->
     {% if messages %}
       {% for message in messages %}
@@ -155,7 +177,7 @@
       <!-- Form wrapper -->
       <div class="relative" id="form-wrapper">
 
-        <form method="post" class="space-y-4 sm:space-y-5" id="contact-form">
+        <form method="post" class="space-y-4 sm:space-y-5 {% if form_disabled %}form-disabled{% endif %}" id="contact-form">
           {% csrf_token %} 
           
           {% if form.non_field_errors %}
@@ -230,14 +252,20 @@
 
           <button
             type="submit"
-            class="w-full px-4 py-3 sm:py-3 rounded-lg text-blue-700 dark:text-blue-400 neu-button text-sm sm:text-base font-medium min-h-[48px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] friendly-hover"
+            {% if form_disabled %}disabled{% endif %}
+            class="w-full px-4 py-3 sm:py-3 rounded-lg text-blue-700 dark:text-blue-400 neu-button text-sm sm:text-base font-medium min-h-[48px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] friendly-hover {% if form_disabled %}opacity-50 cursor-not-allowed pointer-events-none{% endif %}"
             id="submit-button"
           >
+            {% if form_disabled %}
+            <i data-lucide="wrench" class="w-4 h-4 text-amber-500 inline-block mr-2"></i>
+            Form Under Maintenance
+            {% else %}
             <i
               data-lucide="send"
               class="w-4 h-4 text-blue-500 inline-block mr-2"
             ></i>
             Send Message
+            {% endif %}
           </button>
         </form>
       </div>

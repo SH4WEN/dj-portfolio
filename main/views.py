@@ -102,11 +102,11 @@ def certificates(request):
 #     return render(request, 'main/contact.html', {'form': form})
 
 def contact(request):
-    form_disabled = False
+    form_disabled = True
 
     if request.method == 'POST':
         if form_disabled:
-            messages.error(request, "The contact form is currently unavailable.")
+            messages.error(request, "The contact form is currently under maintenance.")
             return redirect('contact')
 
         form = ContactForm(request.POST)
